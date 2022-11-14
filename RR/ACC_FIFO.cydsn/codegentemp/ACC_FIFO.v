@@ -1,6 +1,6 @@
 // ======================================================================
 // ACC_FIFO.v generated from TopDesign.cysch
-// 11/09/2022 at 18:45
+// 11/14/2022 at 17:59
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -461,6 +461,63 @@ endmodule
 // top
 module top ;
 
+    electrical [1:0] Net_77;
+    electrical  Net_75;
+    electrical  Net_50;
+    electrical  Net_48;
+    electrical  Net_47;
+    electrical  Net_76;
+    electrical  Net_49;
+    electrical  Net_82;
+    electrical  Net_81;
+    electrical  Net_80;
+    electrical  Net_79;
+    electrical  Net_78;
+    electrical  Net_46;
+    electrical  Net_45;
+    electrical  Net_44;
+    electrical  Net_43;
+    electrical  Net_42;
+    electrical  Net_41;
+    electrical  Net_40;
+    electrical  Net_39;
+    electrical  Net_51;
+    electrical  Net_52;
+    electrical  Net_53;
+    electrical  Net_86;
+    electrical  Net_55;
+    electrical  Net_56;
+    electrical  Net_57;
+    electrical  Net_67;
+    electrical  Net_68;
+    electrical  Net_38;
+    electrical  Net_37;
+    electrical  Net_36;
+    electrical  Net_35;
+    electrical  Net_34;
+    electrical  Net_33;
+    electrical  Net_69;
+    electrical  Net_70;
+    electrical  Net_71;
+    electrical  Net_66;
+    electrical  Net_65;
+    electrical  Net_64;
+    electrical  Net_63;
+    electrical  Net_62;
+    electrical  Net_61;
+    electrical  Net_60;
+    electrical  Net_59;
+    electrical  Net_72;
+    electrical  Net_73;
+    electrical  Net_74;
+    electrical  Net_32;
+    electrical  Net_31;
+    electrical  Net_30;
+    electrical  Net_29;
+    electrical  Net_28;
+    electrical  Net_27;
+    electrical  Net_26;
+    electrical  Net_25;
           wire  Net_24;
           wire  Net_23;
           wire  Net_22;
@@ -470,21 +527,23 @@ module top ;
           wire  Net_18;
           wire  Net_17;
           wire  Net_16;
-          wire  Net_15;
-          wire  Net_14;
           wire  Net_13;
           wire  Net_12;
           wire  Net_11;
           wire  Net_10;
-          wire  Net_9;
           wire  Net_8;
           wire  Net_7;
           wire  Net_6;
-          wire  Net_5;
           wire  Net_4;
           wire  Net_3;
           wire  Net_2;
           wire  Net_1;
+          wire  Net_5;
+          wire  Net_9;
+          wire  Net_87;
+    electrical  Net_54;
+          wire  Net_15;
+          wire  Net_14;
 
     UART_v2_50_0 UART_1 (
         .clock(1'b0),
@@ -822,6 +881,154 @@ module top ;
         .sda(Net_14),
         .sda_i(1'b0),
         .sda_o(Net_24));
+
+    cy_annotation_universal_v1_0 KIT_059_1 (
+        .connect({
+            Net_25,
+            Net_26,
+            Net_27,
+            Net_28,
+            Net_29,
+            Net_30,
+            Net_31,
+            Net_32,
+            Net_74,
+            Net_73,
+            Net_72,
+            Net_59,
+            Net_60,
+            Net_61,
+            Net_62,
+            Net_63,
+            Net_64,
+            Net_65,
+            Net_66,
+            Net_71,
+            Net_70,
+            Net_69,
+            Net_33,
+            Net_34,
+            Net_35,
+            Net_36,
+            Net_37,
+            Net_38,
+            Net_68,
+            Net_67,
+            Net_54,
+            Net_57,
+            Net_56,
+            Net_55,
+            Net_86,
+            Net_53,
+            Net_52,
+            Net_51,
+            Net_39,
+            Net_40,
+            Net_41,
+            Net_42,
+            Net_43,
+            Net_44,
+            Net_45,
+            Net_46,
+            Net_78,
+            Net_79,
+            Net_80,
+            Net_81,
+            Net_82,
+            Net_49,
+            Net_76,
+            Net_47,
+            Net_48,
+            Net_50,
+            Net_75,
+            Net_77[1:0]
+        })
+    );
+    defparam KIT_059_1.comp_name = "KIT_059_v1_0";
+    defparam KIT_059_1.port_names = "P_00, P_01, P_02, P_03, P_04, P_05, P_06, P_07, P_10, P_11, P_12, P_120, P_121, P_122, P_123, P_124, P_125, P_126, P_127, P_13, P_14, P_15, P_150, P_151, P_152, P_153, P_154, P_155, P_16, P_17, P_20, P_21, P_22, P_23, P_24, P_25, P_26, P_27, P_30, P_31, P_32, P_33, P_34, P_35, P_36, P_37, P_59, P_60, P_61, P_62, P_63, P_GND_0, P_GND_1, P_GND_3, P_RST_0, P_VDD_0, P_VDDIO, USB_1_1, USB_1_0";
+    defparam KIT_059_1.width = 59;
+
+
+	cy_isr_v1_0
+		#(.int_type(2'b10))
+		INT1
+		 (.int_signal(Net_87));
+
+
+	wire [0:0] tmpOE__Pin_FIFO_FULL_net;
+	wire [0:0] tmpIO_0__Pin_FIFO_FULL_net;
+	wire [0:0] tmpINTERRUPT_0__Pin_FIFO_FULL_net;
+	electrical [0:0] tmpSIOVREF__Pin_FIFO_FULL_net;
+
+	cy_psoc3_pins_v1_10
+		#(.id("8d318d8b-cf7b-4b6b-b02c-ab1c5c49d0ba"),
+		  .drive_mode(3'b001),
+		  .ibuf_enabled(1'b1),
+		  .init_dr_st(1'b0),
+		  .input_clk_en(0),
+		  .input_sync(1'b0),
+		  .input_sync_mode(1'b0),
+		  .intr_mode(2'b00),
+		  .invert_in_clock(0),
+		  .invert_in_clock_en(0),
+		  .invert_in_reset(0),
+		  .invert_out_clock(0),
+		  .invert_out_clock_en(0),
+		  .invert_out_reset(0),
+		  .io_voltage(""),
+		  .layout_mode("CONTIGUOUS"),
+		  .oe_conn(1'b0),
+		  .oe_reset(0),
+		  .oe_sync(1'b0),
+		  .output_clk_en(0),
+		  .output_clock_mode(1'b0),
+		  .output_conn(1'b0),
+		  .output_mode(1'b0),
+		  .output_reset(0),
+		  .output_sync(1'b0),
+		  .pa_in_clock(-1),
+		  .pa_in_clock_en(-1),
+		  .pa_in_reset(-1),
+		  .pa_out_clock(-1),
+		  .pa_out_clock_en(-1),
+		  .pa_out_reset(-1),
+		  .pin_aliases(""),
+		  .pin_mode("I"),
+		  .por_state(4),
+		  .sio_group_cnt(0),
+		  .sio_hyst(1'b1),
+		  .sio_ibuf(""),
+		  .sio_info(2'b00),
+		  .sio_obuf(""),
+		  .sio_refsel(""),
+		  .sio_vtrip(""),
+		  .sio_hifreq(""),
+		  .sio_vohsel(""),
+		  .slew_rate(1'b0),
+		  .spanning(0),
+		  .use_annotation(1'b1),
+		  .vtrip(2'b00),
+		  .width(1),
+		  .ovt_hyst_trim(1'b0),
+		  .ovt_needed(1'b0),
+		  .ovt_slew_control(2'b00),
+		  .input_buffer_sel(2'b00))
+		Pin_FIFO_FULL
+		 (.oe(tmpOE__Pin_FIFO_FULL_net),
+		  .y({1'b0}),
+		  .fb({Net_87}),
+		  .io({tmpIO_0__Pin_FIFO_FULL_net[0:0]}),
+		  .siovref(tmpSIOVREF__Pin_FIFO_FULL_net),
+		  .interrupt({tmpINTERRUPT_0__Pin_FIFO_FULL_net[0:0]}),
+		  .annotation({Net_54}),
+		  .in_clock({1'b0}),
+		  .in_clock_en({1'b1}),
+		  .in_reset({1'b0}),
+		  .out_clock({1'b0}),
+		  .out_clock_en({1'b1}),
+		  .out_reset({1'b0}));
+
+	assign tmpOE__Pin_FIFO_FULL_net = (`CYDEV_CHIP_MEMBER_USED == `CYDEV_CHIP_MEMBER_3A && `CYDEV_CHIP_REVISION_USED < `CYDEV_CHIP_REVISION_3A_ES3) ? ~{1'b1} : {1'b1};
 
 
 

@@ -1,11 +1,7 @@
 /* ========================================
  *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
+ * Legge sempre lo stesso valore cioè il primo
+ * ad ogni overrun
  *
  * ========================================
 */
@@ -24,221 +20,210 @@ int main(void)
     
     CyDelay(5); //"The boot procedure is complete about 5 ms after device power-up."
     
-    // Check if LIS3DH is connected
-    uint32_t rval = I2C_Master_MasterSendStart(LIS3DH_DEVICE_ADDRESS, I2C_Master_WRITE_XFER_MODE);
-    if( rval == I2C_Master_MSTR_NO_ERROR ) {
-        UART_1_PutString("LIS3DH found @ address 0x18\r\n");
-    }
-    I2C_Master_MasterSendStop();
-    
-    UART_1_PutString("**************\r\n");
-    UART_1_PutString("** I2C Scan **\r\n");
-    UART_1_PutString("**************\r\n");
-    
-    CyDelay(10);
-    
-    // String to print out messages over UART
-    char message[50] = {'\0'};
-    
-  
-	// Setup the screen and print the header
-	UART_1_PutString("\n\n   ");
-	for(uint8_t i = 0; i<0x10; i++)
-	{
-        sprintf(message, "%02X ", i);
-		UART_1_PutString(message);
-	}
-    
-    // SCAN the I2C BUS for slaves
-	for( uint8_t i2caddress = 0; i2caddress < 0x80; i2caddress++ ) {
-        
-		if(i2caddress % 0x10 == 0 ) {
-            sprintf(message, "\n%02X ", i2caddress);
-		    UART_1_PutString(message);
-        }
- 
-		rval = I2C_Master_MasterSendStart(i2caddress, I2C_Master_WRITE_XFER_MODE);
-        
-        if( rval == I2C_Master_MSTR_NO_ERROR ) // If you get ACK then print the address
-		{
-            sprintf(message, "%02X ", i2caddress);
-		    UART_1_PutString(message);
-		}
-		else //  Otherwise print a --
-		{
-		    UART_1_PutString("-- ");
-		}
-        I2C_Master_MasterSendStop();
-	}
-	UART_1_PutString("\n\n");
-    
+   
     /******************************************/
     /*            I2C Reading                 */
     /******************************************/
-    
-    // Check the defines in LIS3DH.h for the address of the
-    // registers to read
-    
-    /*      I2C Master Read - WHOAMI Register       */
-    uint8_t whoami_reg;
-    ErrorCode error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS, 
-                                                  LIS3DH_WHO_AM_I_REG_ADDR,
-                                                  &whoami_reg);
-//    if( error == NO_ERROR ) {
-//        sprintf(message, "WHOAMI register value: 0x%02X [Expected value: 0x%02X]\r\n", whoami_reg, LIS3DH_WHOAMI_RETVAL);
-//        UART_1_PutString(message);
-//    }
-//    else {
-//        UART_1_PutString("I2C error while reading LIS3DH_WHO_AM_I_REG_ADDR\r\n");
-//    }
-//    
-//    
-//    /*      I2C Master Read - STATUS Register       */
-//    
-//    uint8_t status_reg;
-//    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS, 
-//                                        LIS3DH_STATUS_REG,
-//                                        &status_reg);
-//    if( error == NO_ERROR ) {
-//        sprintf(message, "STATUS register value: 0x%02X\r\n", status_reg);
-//        UART_1_PutString(message);
-//    }
-//    else {
-//        UART_1_PutString("I2C error while reading LIS3DH_STATUS_REG\r\n");
-//    }
-//    
-//    /*      I2C Master Read - CTRL Register 1       */
-//    
+
+    char message[32];
     uint8_t control_reg;
-//    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS, 
-//                                        LIS3DH_CTRL_REG1,
-//                                        &control_reg);
-//    if( error == NO_ERROR ) {
-//        sprintf(message, "CTRL register 1 value: 0x%02X\r\n", control_reg);
-//        UART_1_PutString(message);
-//    }
-//    else {
-//        UART_1_PutString("I2C error while reading LIS3DH_CTRL_REG1\r\n");
-//    }
-    
-    /******************************************/
-    /*       I2C Writing CTRL REG1            */
-    /******************************************/
-    
-//    UART_1_PutString("\r\nWriting new values...\r\n");
-//    
-//    if (control_reg != LIS3DH_NORMAL_MODE_CTRL_REG1)
-//    {
-//        control_reg = LIS3DH_NORMAL_MODE_CTRL_REG1;
-//        
-//        error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
-//                                             LIS3DH_CTRL_REG1,
-//                                             control_reg);
-//        
-//        if (error == NO_ERROR)
-//        {
-//            sprintf(message, "\r\nCTRL register 1 successfully written as: 0x%02X\r\n", control_reg);
-//            UART_1_PutString(message);
-//        }
-//        else
-//        {
-//            UART_1_PutString("\r\nError occured during I2C comm to set control register 1\r\n");
-//        }
-//    }
+     
+    //enable FIFO buffer FIFO_EN=1
     control_reg = LIS3DH_CTRL_REG5|0x40;
-    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+    ErrorCode error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
                                              LIS3DH_CTRL_REG5,
                                              control_reg);
-        
-        if (error == NO_ERROR)
-        {
-            sprintf(message, "\r\nCTRL_REG_5 successfully written as: 0x%02X\r\n", control_reg);
-            UART_1_PutString(message);
-        }
-        else
-        {
-            UART_1_PutString("\r\nError occured during I2C comm to set control register 1\r\n");
-        }
-       
+   
+    //check if written correctly
+    uint8_t check;
+    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS, 
+                                        LIS3DH_CTRL_REG5,
+                                        &check);
+    if( error == NO_ERROR ) {
+        sprintf(message, "CTRL_REG5 register value: 0x%02X [Expected value: 0x%02X]\r\n", check, control_reg);
+        UART_1_PutString(message);
+    }
+    else {
+        UART_1_PutString("I2C error while reading LIS3DH_WHO_AM_I_REG_ADDR\r\n");
+    }
+    
+    //selecting FIFO mode   
     control_reg = LIS3DH_FIFO_CTRL_REG|0x40;
     error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
                                              LIS3DH_FIFO_CTRL_REG,
                                              control_reg);
         
-        if (error == NO_ERROR)
-        {
-            sprintf(message, "\r\nFIFO_CTRL_REG successfully written as: 0x%02X\r\n", control_reg);
-            UART_1_PutString(message);
-        }
-        else
-        {
-            UART_1_PutString("\r\nError occured during I2C comm to set control register 1\r\n");
-        }
-        
-    control_reg = LIS3DH_CTRL_REG5|0x40;
+    if (error == NO_ERROR)
+    {
+        sprintf(message, "FIFO_MODE enabled\r\n");
+        UART_1_PutString(message);
+    }
+    else
+    {
+        UART_1_PutString("\r\nError occured during I2C comm to set control register 1\r\n");
+    }
+    //select CTRL_REG1 activate High Power Mode 200Hz and enable axis
+    control_reg= LIS3DH_CTRL_REG1|0x67;
     error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
-                                             LIS3DH_CTRL_REG5,
-                                             control_reg);
-        
-        if (error == NO_ERROR)
-        {
-            sprintf(message, "\r\nCTRL register 1 successfully written as: 0x%02X\r\n", control_reg);
-            UART_1_PutString(message);
-        }
-        else
-        {
-            UART_1_PutString("\r\nError occured during I2C comm to set control register 1\r\n");
-        }
-        
-    control_reg = LIS3DH_CTRL_REG4|0x00;
+                                        LIS3DH_CTRL_REG1,
+                                        control_reg);
+ 
+    //set full scale +/-2g (no change from default)    
+    control_reg = LIS3DH_CTRL_REG4&0xCF;
     error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
-                                             LIS3DH_CTRL_REG4,
-                                             control_reg);
+                                         LIS3DH_CTRL_REG4,
+                                         control_reg);
+       
+    //enable interrupt on pin INT1 --> CTRL_REG3, I1_OVERRUN=1
+    control_reg = LIS3DH_CTRL_REG3|0x02;
+    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+                                         LIS3DH_CTRL_REG3,
+                                         control_reg);
+     
         
-        if (error == NO_ERROR)
-        {
-            sprintf(message, "\r\nCTRL register 4 successfully written as: 0x%02X\r\n", control_reg);
-            UART_1_PutString(message);
-        }
-        else
-        {
-            UART_1_PutString("\r\nError occured during I2C comm to set control register 1\r\n");
-        }
-    /******************************************/
-    /*     I2C Reading CTRL REG1 again        */
-    /******************************************/
+        
+//    /*READ DATI*/
+    
     uint8_t x_data[2];
     int out_x;
+    float data_x;
+    
+    uint8_t y_data[2];
+    int out_y;
+    float data_y;
+
+    uint8_t z_data[2];
+    int out_z;
+    float data_z;
+
     uint8_t address;
-    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
-                                        LIS3DH_CTRL_REG4,
-                                        &address);
-    if (error == NO_ERROR)
-        {
-            sprintf(message, "\r\nIl registro è 0x%02X\r\n", address);
-            UART_1_PutString(message);
-        }
+    float lis_data[96];
+    uint8_t overrun=0;
+
+//    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+//                                        LIS3DH_CTRL_REG4,
+//                                        &address);
+//    if (error == NO_ERROR)
+//        {
+//            sprintf(message, "\r\nIl registro 0x%02X\r\n", address);
+//            UART_1_PutString(message);
+//        }
+    
+    int flag_dati =0;
+    /*FINE READ DATI*/
+//        
     for(;;)
     {
-        /* Place your application code here. */
-//        error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
-//                                        LIS3DH_OUT_X_L,
-//                                        &x_data[0]);
-//        error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
-//                                        LIS3DH_OUT_X_H,
-//                                        &x_data[1]);
+//        /* Place your application code here. */
+    
+//    //reset fifo: enable bypass mode
+//    control_reg = LIS3DH_FIFO_CTRL_REG&0x3F;
+//    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+//                                             LIS3DH_FIFO_CTRL_REG,
+//                                             control_reg);
+//        //check FIFO status: 0x20 if empty
+//    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+//                                        FIFO_SRC_REG,
+//                                        &address);
+        //controllo overrun 
+        error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+                                        LIS3DH_FIFO_SRC_REG,
+                                        &overrun);
+       
+        //sprintf(message, "\r\nOverrun:  %d\r\n", overrun&0x40);
+        //UART_1_PutString(message);
+        
+        /*LETTURA DATI AD OGNI OVERRUN*/
+        if((overrun&0x40)==0x40)
+        {
+                sprintf(message, "FIFO overrun");
+                UART_1_PutString(message);
+ // il problema è che non scorre la FIFO ma stampa lo stesso valore 96 volte
+                 for(int i=0; i<96; i+=3){
+                    //x 
+                    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+                                                        LIS3DH_OUT_X_L,
+                                                        &x_data[0]);
+                    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+                                                        LIS3DH_OUT_X_H,
+                                                        &x_data[1]);
+                    out_x=(x_data[0]|(x_data[1]<<8));
+                    lis_data[i]=out_x/64.0;
+                    //y
+                    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+                                                        LIS3DH_OUT_Y_L,
+                                                        &y_data[0]);
+                    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+                                                        LIS3DH_OUT_Y_H,
+                                                        &y_data[1]);
+                    out_y=(y_data[0]|(y_data[1]<<8));
+                    lis_data[i+1]=out_y/64.0;
+
+                    //z
+                    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+                                                        LIS3DH_OUT_Z_L,
+                                                        &z_data[0]);
+                    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+                                                        LIS3DH_OUT_Z_H,
+                                                        &z_data[1]);
+                    out_z=(z_data[0]|(z_data[1]<<8));
+                    lis_data[i+2]=out_z/64.0;
+                    CyDelay(3);
+                    
+
+            //        acc[i] = (float)(tmp_int16[i]) * LIS3DH_ACC_CONVERT_2G;
+            //        acc[i+1] = (float)(tmp_int16[i+1]) * LIS3DH_ACC_CONVERT_2G;
+            //        acc[i+2] = (float)(tmp_int16[i+2]) * LIS3DH_ACC_CONVERT_2G;}
+                    }
+                    flag_dati=1;
+                                     
+                            
+            //        //reset fifo: enable bypass mode
+                    control_reg = LIS3DH_FIFO_CTRL_REG&0x3F;
+                    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+                                                             LIS3DH_FIFO_CTRL_REG,
+                                                             control_reg);
+                   //enable fifo mode  
+                control_reg = LIS3DH_FIFO_CTRL_REG|0x40;
+                error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+                                                 LIS3DH_FIFO_CTRL_REG,
+                                                 control_reg);
+                
+            
+        }
+        /*fine overrun*/
+        
+        //stampa lis data
+        if(flag_dati==1){
+ 
+                flag_dati=0;
+                sprintf(message, "\r\nVALORI ACCELERAZIONE\r\n");
+                UART_1_PutString(message);
+
+            for(int i=0; i<96; i+=3){
+                sprintf(message, "\r\nx: %.3f, y: %.3f, z: %.3f\r\n", lis_data[i],
+                 lis_data[i+1],
+                 lis_data[i+2]);
+                UART_1_PutString(message);
+
+            }
+            
+            
+            
+        }
+            
 //    
-//        
+//    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+//                                        LIS3DH_STATUS_REG,
+//                                        &address);
 //    if (error == NO_ERROR)
-//    {
-//        out_x=(int) ((x_data[0]|(x_data[1]<<8))>>6);
-//        sprintf(message, "Acceleration x: %d\r\n", out_x);
-//        UART_1_PutString(message);
-//    }
-//    else
-//    {
-//        UART_1_PutString("Error occured during I2C comm to read control reg1\r\n");
-//    }
+//        {
+//            sprintf(message, "\r\nStatus register 0x%02X\r\n", address);
+//            UART_1_PutString(message);
+//        }
+        
+
+       CyDelay(100);
         }
 }
 
