@@ -99,6 +99,8 @@
     
     // Brief Address of OUT_Z_H
     #define LIS3DH_OUT_Z_H 0x2E
+    
+    #define LIS3DH_FIFO_SRC_REG 0x2F
     ////////////////////////////////////////////////
     
 #endif

@@ -2,7 +2,7 @@
 --	Conversion of ACC_FIFO.v to vh2:
 --
 --	Cypress Semiconductor - WARP Version 6.3 IR 41
---	Wed Nov 09 18:46:02 2022
+--	Mon Nov 14 17:59:46 2022
 --
 
 USE cypress.cypress.all;
@@ -396,6 +396,70 @@ SIGNAL Net_19 : bit;
 SIGNAL \I2C_Master:Net_975\ : bit;
 SIGNAL Net_22 : bit;
 SIGNAL Net_24 : bit;
+TERMINAL Net_25 : bit;
+TERMINAL Net_26 : bit;
+TERMINAL Net_27 : bit;
+TERMINAL Net_28 : bit;
+TERMINAL Net_29 : bit;
+TERMINAL Net_30 : bit;
+TERMINAL Net_31 : bit;
+TERMINAL Net_32 : bit;
+TERMINAL Net_74 : bit;
+TERMINAL Net_73 : bit;
+TERMINAL Net_72 : bit;
+TERMINAL Net_59 : bit;
+TERMINAL Net_60 : bit;
+TERMINAL Net_61 : bit;
+TERMINAL Net_62 : bit;
+TERMINAL Net_63 : bit;
+TERMINAL Net_64 : bit;
+TERMINAL Net_65 : bit;
+TERMINAL Net_66 : bit;
+TERMINAL Net_71 : bit;
+TERMINAL Net_70 : bit;
+TERMINAL Net_69 : bit;
+TERMINAL Net_33 : bit;
+TERMINAL Net_34 : bit;
+TERMINAL Net_35 : bit;
+TERMINAL Net_36 : bit;
+TERMINAL Net_37 : bit;
+TERMINAL Net_38 : bit;
+TERMINAL Net_68 : bit;
+TERMINAL Net_67 : bit;
+TERMINAL Net_54 : bit;
+TERMINAL Net_57 : bit;
+TERMINAL Net_56 : bit;
+TERMINAL Net_55 : bit;
+TERMINAL Net_86 : bit;
+TERMINAL Net_53 : bit;
+TERMINAL Net_52 : bit;
+TERMINAL Net_51 : bit;
+TERMINAL Net_39 : bit;
+TERMINAL Net_40 : bit;
+TERMINAL Net_41 : bit;
+TERMINAL Net_42 : bit;
+TERMINAL Net_43 : bit;
+TERMINAL Net_44 : bit;
+TERMINAL Net_45 : bit;
+TERMINAL Net_46 : bit;
+TERMINAL Net_78 : bit;
+TERMINAL Net_79 : bit;
+TERMINAL Net_80 : bit;
+TERMINAL Net_81 : bit;
+TERMINAL Net_82 : bit;
+TERMINAL Net_49 : bit;
+TERMINAL Net_76 : bit;
+TERMINAL Net_47 : bit;
+TERMINAL Net_48 : bit;
+TERMINAL Net_50 : bit;
+TERMINAL Net_75 : bit;
+TERMINAL Net_77_1 : bit;
+TERMINAL Net_77_0 : bit;
+SIGNAL Net_87 : bit;
+SIGNAL tmpOE__Pin_FIFO_FULL_net_0 : bit;
+SIGNAL tmpIO_0__Pin_FIFO_FULL_net_0 : bit;
+TERMINAL tmpSIOVREF__Pin_FIFO_FULL_net_0 : bit;
+SIGNAL tmpINTERRUPT_0__Pin_FIFO_FULL_net_0 : bit;
 SIGNAL \UART_1:BUART:reset_reg\\D\ : bit;
 SIGNAL \UART_1:BUART:txn\\D\ : bit;
 SIGNAL \UART_1:BUART:tx_state_1\\D\ : bit;
@@ -1157,6 +1221,99 @@ SCL_1:cy_psoc3_pins_v1_10
 		oe=>one,
 		y=>Net_14,
 		yfb=>\I2C_Master:Net_1109_1\);
+KIT_059_1:cy_annotation_universal_v1_0
+	GENERIC MAP(comp_name=>"KIT_059_v1_0",
+		port_names=>"P_00, P_01, P_02, P_03, P_04, P_05, P_06, P_07, P_10, P_11, P_12, P_120, P_121, P_122, P_123, P_124, P_125, P_126, P_127, P_13, P_14, P_15, P_150, P_151, P_152, P_153, P_154, P_155, P_16, P_17, P_20, P_21, P_22, P_23, P_24, P_25, P_26, P_27, P_30, P_31, P_32, P_33, P_34, P_35, P_36, P_37, P_59, P_60, P_61, P_62, P_63, P_GND_0, P_GND_1, P_GND_3, P_RST_0, P_VDD_0, P_VDDIO, USB_1_1, USB_1_0",
+		width=>59)
+	PORT MAP(connect=>(Net_25, Net_26, Net_27, Net_28,
+			Net_29, Net_30, Net_31, Net_32,
+			Net_74, Net_73, Net_72, Net_59,
+			Net_60, Net_61, Net_62, Net_63,
+			Net_64, Net_65, Net_66, Net_71,
+			Net_70, Net_69, Net_33, Net_34,
+			Net_35, Net_36, Net_37, Net_38,
+			Net_68, Net_67, Net_54, Net_57,
+			Net_56, Net_55, Net_86, Net_53,
+			Net_52, Net_51, Net_39, Net_40,
+			Net_41, Net_42, Net_43, Net_44,
+			Net_45, Net_46, Net_78, Net_79,
+			Net_80, Net_81, Net_82, Net_49,
+			Net_76, Net_47, Net_48, Net_50,
+			Net_75, Net_77_1, Net_77_0));
+INT1:cy_isr_v1_0
+	GENERIC MAP(int_type=>"10",
+		is_nmi=>'0')
+	PORT MAP(int_signal=>Net_87);
+Pin_FIFO_FULL:cy_psoc3_pins_v1_10
+	GENERIC MAP(id=>"8d318d8b-cf7b-4b6b-b02c-ab1c5c49d0ba",
+		drive_mode=>"001",
+		ibuf_enabled=>"1",
+		init_dr_st=>"0",
+		input_sync=>"0",
+		input_clk_en=>'0',
+		input_sync_mode=>"0",
+		intr_mode=>"00",
+		invert_in_clock=>'0',
+		invert_in_clock_en=>'0',
+		invert_in_reset=>'0',
+		invert_out_clock=>'0',
+		invert_out_clock_en=>'0',
+		invert_out_reset=>'0',
+		io_voltage=>"",
+		layout_mode=>"CONTIGUOUS",
+		output_conn=>"0",
+		output_sync=>"0",
+		output_clk_en=>'0',
+		output_mode=>"0",
+		output_reset=>'0',
+		output_clock_mode=>"0",
+		oe_sync=>"0",
+		oe_conn=>"0",
+		oe_reset=>'0',
+		pin_aliases=>"",
+		pin_mode=>"I",
+		por_state=>4,
+		sio_group_cnt=>0,
+		sio_hifreq=>"00000000",
+		sio_hyst=>"1",
+		sio_ibuf=>"00000000",
+		sio_info=>"00",
+		sio_obuf=>"00000000",
+		sio_refsel=>"00000000",
+		sio_vtrip=>"00000000",
+		sio_vohsel=>"00000000",
+		slew_rate=>"0",
+		spanning=>'0',
+		sw_only=>'0',
+		vtrip=>"00",
+		width=>1,
+		port_alias_required=>'0',
+		port_alias_group=>"",
+		use_annotation=>"1",
+		pa_in_clock=>-1,
+		pa_in_clock_en=>-1,
+		pa_in_reset=>-1,
+		pa_out_clock=>-1,
+		pa_out_clock_en=>-1,
+		pa_out_reset=>-1,
+		ovt_needed=>"0",
+		ovt_slew_control=>"00",
+		ovt_hyst_trim=>"0",
+		input_buffer_sel=>"00")
+	PORT MAP(oe=>(one),
+		y=>(zero),
+		fb=>Net_87,
+		analog=>(open),
+		io=>(tmpIO_0__Pin_FIFO_FULL_net_0),
+		siovref=>(tmpSIOVREF__Pin_FIFO_FULL_net_0),
+		annotation=>Net_54,
+		in_clock=>zero,
+		in_clock_en=>one,
+		in_reset=>zero,
+		out_clock=>zero,
+		out_clock_en=>one,
+		out_reset=>zero,
+		interrupt=>tmpINTERRUPT_0__Pin_FIFO_FULL_net_0);
 \UART_1:BUART:reset_reg\:cy_dff
 	PORT MAP(d=>zero,
 		clk=>\UART_1:BUART:clock_op\,
