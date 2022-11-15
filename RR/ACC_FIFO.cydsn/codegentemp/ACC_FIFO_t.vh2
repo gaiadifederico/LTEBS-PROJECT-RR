@@ -1,5 +1,5 @@
--- Project:   C:\Users\Gaia Di Federico\Documents\LM II Anno\Laboratorio tecnologie elettroniche\LTEBS-PROJECT-RR\RR\ACC_FIFO.cydsn\ACC_FIFO.cyprj
--- Generated: 11/14/2022 17:59:49
+-- Project:   C:\Users\Martina\Documents\Ing.Biomedica Magistrale\2 ANNO\Lab biosensori\PROGETTO\Repository_progetto\LTEBS-PROJECT-RR\RR\ACC_FIFO.cydsn\ACC_FIFO.cyprj
+-- Generated: 11/15/2022 10:06:33
 -- PSoC Creator  4.4
 
 ENTITY ACC_FIFO IS

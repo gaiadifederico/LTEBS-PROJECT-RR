@@ -20,21 +20,32 @@ int main(void)
     
     CyDelay(5); //"The boot procedure is complete about 5 ms after device power-up."
     
-   
-    /******************************************/
-    /*            I2C Reading                 */
-    /******************************************/
 
     char message[32];
     uint8_t control_reg;
-     
-    //enable FIFO buffer FIFO_EN=1
-    control_reg = LIS3DH_CTRL_REG5|0x40;
+    
+
+    
+    //selecting FIFO mode   
+    control_reg = 0x40;
     ErrorCode error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+                                             LIS3DH_FIFO_CTRL_REG,
+                                             control_reg);
+      //enable FIFO buffer FIFO_EN=1
+    control_reg = 0x40;
+    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
                                              LIS3DH_CTRL_REG5,
                                              control_reg);
-   
-    //check if written correctly
+    if (error == NO_ERROR)
+    {
+        sprintf(message, "FIFO_MODE enabled\r\n");
+        UART_1_PutString(message);
+    }
+    else
+    {
+        UART_1_PutString("\r\nError occured during I2C comm to set control register 1\r\n");
+    }
+    //check if CTRL_REG5 is written correctly
     uint8_t check;
     error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS, 
                                         LIS3DH_CTRL_REG5,
@@ -46,40 +57,36 @@ int main(void)
     else {
         UART_1_PutString("I2C error while reading LIS3DH_WHO_AM_I_REG_ADDR\r\n");
     }
-    
-    //selecting FIFO mode   
-    control_reg = LIS3DH_FIFO_CTRL_REG|0x40;
-    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
-                                             LIS3DH_FIFO_CTRL_REG,
-                                             control_reg);
         
-    if (error == NO_ERROR)
-    {
-        sprintf(message, "FIFO_MODE enabled\r\n");
-        UART_1_PutString(message);
-    }
-    else
-    {
-        UART_1_PutString("\r\nError occured during I2C comm to set control register 1\r\n");
-    }
-    //select CTRL_REG1 activate High Power Mode 200Hz and enable axis
-    control_reg= LIS3DH_CTRL_REG1|0x67;
+
+    //select CTRL_REG1 activate High Power Mode 10Hz and enable axis
+    control_reg= 0x27;
     error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
                                         LIS3DH_CTRL_REG1,
                                         control_reg);
+    //reading CTRL_REG1
+    uint8_t reg1;
+    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+                                        LIS3DH_CTRL_REG1,
+                                        &reg1);
+    if( error == NO_ERROR ) {
+        sprintf(message, "Valore CTRL_REG1 0x%02X\r\n", reg1);
+        UART_1_PutString(message);
+        }
+ 
  
     //set full scale +/-2g (no change from default)    
-    control_reg = LIS3DH_CTRL_REG4&0xCF;
+    control_reg = 0xCF;
     error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
                                          LIS3DH_CTRL_REG4,
                                          control_reg);
        
     //enable interrupt on pin INT1 --> CTRL_REG3, I1_OVERRUN=1
-    control_reg = LIS3DH_CTRL_REG3|0x02;
-    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
-                                         LIS3DH_CTRL_REG3,
-                                         control_reg);
-     
+//    control_reg = LIS3DH_CTRL_REG3|0x02;
+//    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+//                                         LIS3DH_CTRL_REG3,
+//                                         control_reg);
+//     
         
         
 //    /*READ DATI*/
@@ -99,7 +106,8 @@ int main(void)
     uint8_t address;
     float lis_data[96];
     uint8_t overrun=0;
-
+    uint8_t accelerazioni=0;
+    uint8_t acc[96];
 //    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
 //                                        LIS3DH_CTRL_REG4,
 //                                        &address);
@@ -109,10 +117,10 @@ int main(void)
 //            UART_1_PutString(message);
 //        }
     
-    int flag_dati =0;
+    uint8_t flag_dati =0;
     /*FINE READ DATI*/
 //        
-    for(;;)
+   for(;;)
     {
 //        /* Place your application code here. */
     
@@ -138,6 +146,12 @@ int main(void)
         {
                 sprintf(message, "FIFO overrun");
                 UART_1_PutString(message);
+//            //reset fifo: enable bypass mode
+//                    control_reg = LIS3DH_FIFO_CTRL_REG&0x3F;
+//                    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+//                                                             LIS3DH_FIFO_CTRL_REG,
+//                                                             control_reg);
+
  // il problema è che non scorre la FIFO ma stampa lo stesso valore 96 volte
                  for(int i=0; i<96; i+=3){
                     //x 
@@ -228,3 +242,4 @@ int main(void)
 }
 
 /* [] END OF FILE */
+

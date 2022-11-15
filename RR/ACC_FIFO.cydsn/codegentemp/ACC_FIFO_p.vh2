@@ -1,5 +1,5 @@
 -- Project:   ACC_FIFO
--- Generated: 11/14/2022 17:59:47
+-- Generated: 11/15/2022 10:06:32
 -- PSoC Creator  4.4
 
 ENTITY ACC_FIFO IS
