@@ -1,0 +1,2268 @@
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.main,"ax",%progbits
+  20              		.align	2
+  21              		.global	main
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	main, %function
+  25              	main:
+  26              	.LFB64:
+  27              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * Legge sempre lo stesso valore cioè il primo
+   4:main.c        ****  * ad ogni overrun
+   5:main.c        ****  *
+   6:main.c        ****  * ========================================
+   7:main.c        **** */
+   8:main.c        **** #include <stdio.h>
+   9:main.c        **** #include "project.h"
+  10:main.c        **** #include "../src_shared/I2C_Interface.h"
+  11:main.c        **** #include "../src_shared/LIS3DH.h"
+  12:main.c        **** 
+  13:main.c        **** int main(void)
+  14:main.c        **** {
+  28              		.loc 1 14 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 232
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 70B5     		push	{r4, r5, r6, lr}
+  33              		.cfi_def_cfa_offset 16
+  34              		.cfi_offset 4, -16
+  35              		.cfi_offset 5, -12
+  36              		.cfi_offset 6, -8
+  37              		.cfi_offset 14, -4
+  38 0002 BCB0     		sub	sp, sp, #240
+  39              		.cfi_def_cfa_offset 256
+  15:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */
+  40              		.loc 1 15 0
+  41              		.syntax unified
+  42              	@ 15 "main.c" 1
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 2
+
+
+  43 0004 62B6     		CPSIE   i
+  44              	@ 0 "" 2
+  16:main.c        **** 
+  17:main.c        ****     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+  18:main.c        ****     I2C_Peripheral_Start();
+  45              		.loc 1 18 0
+  46              		.thumb
+  47              		.syntax unified
+  48 0006 FFF7FEFF 		bl	I2C_Peripheral_Start
+  49              	.LVL0:
+  19:main.c        ****     UART_1_Start();
+  50              		.loc 1 19 0
+  51 000a FFF7FEFF 		bl	UART_1_Start
+  52              	.LVL1:
+  20:main.c        ****     
+  21:main.c        ****     CyDelay(5); //"The boot procedure is complete about 5 ms after device power-up."
+  53              		.loc 1 21 0
+  54 000e 0520     		movs	r0, #5
+  55 0010 FFF7FEFF 		bl	CyDelay
+  56              	.LVL2:
+  22:main.c        ****     
+  23:main.c        **** 
+  24:main.c        ****     char message[32];
+  25:main.c        ****     uint8_t control_reg;
+  26:main.c        ****     
+  27:main.c        **** 
+  28:main.c        ****     
+  29:main.c        ****     //selecting FIFO mode   
+  30:main.c        ****     control_reg = 0x40;
+  31:main.c        ****     ErrorCode error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+  57              		.loc 1 31 0
+  58 0014 4022     		movs	r2, #64
+  59 0016 2E21     		movs	r1, #46
+  60 0018 1820     		movs	r0, #24
+  61 001a FFF7FEFF 		bl	I2C_Peripheral_WriteRegister
+  62              	.LVL3:
+  32:main.c        ****                                              LIS3DH_FIFO_CTRL_REG,
+  33:main.c        ****                                              control_reg);
+  34:main.c        ****       //enable FIFO buffer FIFO_EN=1
+  35:main.c        ****     control_reg = 0x40;
+  36:main.c        ****     error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+  63              		.loc 1 36 0
+  64 001e 4022     		movs	r2, #64
+  65 0020 2421     		movs	r1, #36
+  66 0022 1820     		movs	r0, #24
+  67 0024 FFF7FEFF 		bl	I2C_Peripheral_WriteRegister
+  68              	.LVL4:
+  37:main.c        ****                                              LIS3DH_CTRL_REG5,
+  38:main.c        ****                                              control_reg);
+  39:main.c        ****     if (error == NO_ERROR)
+  69              		.loc 1 39 0
+  70 0028 48B9     		cbnz	r0, .L2
+  40:main.c        ****     {
+  41:main.c        ****         sprintf(message, "FIFO_MODE enabled\r\n");
+  71              		.loc 1 41 0
+  72 002a 34AC     		add	r4, sp, #208
+  73 002c 5C4D     		ldr	r5, .L15
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 3
+
+
+  74 002e 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+  75              	.LVL5:
+  76 0030 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+  77 0032 2B68     		ldr	r3, [r5]
+  78 0034 2360     		str	r3, [r4]
+  42:main.c        ****         UART_1_PutString(message);
+  79              		.loc 1 42 0
+  80 0036 34A8     		add	r0, sp, #208
+  81 0038 FFF7FEFF 		bl	UART_1_PutString
+  82              	.LVL6:
+  83 003c 02E0     		b	.L3
+  84              	.LVL7:
+  85              	.L2:
+  43:main.c        ****     }
+  44:main.c        ****     else
+  45:main.c        ****     {
+  46:main.c        ****         UART_1_PutString("\r\nError occured during I2C comm to set control register 1\r\n");
+  86              		.loc 1 46 0
+  87 003e 5948     		ldr	r0, .L15+4
+  88              	.LVL8:
+  89 0040 FFF7FEFF 		bl	UART_1_PutString
+  90              	.LVL9:
+  91              	.L3:
+  47:main.c        ****     }
+  48:main.c        ****     //check if CTRL_REG5 is written correctly
+  49:main.c        ****     uint8_t check;
+  50:main.c        ****     error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS, 
+  92              		.loc 1 50 0
+  93 0044 0DF1CF02 		add	r2, sp, #207
+  94 0048 2421     		movs	r1, #36
+  95 004a 1820     		movs	r0, #24
+  96 004c FFF7FEFF 		bl	I2C_Peripheral_ReadRegister
+  97              	.LVL10:
+  51:main.c        ****                                         LIS3DH_CTRL_REG5,
+  52:main.c        ****                                         &check);
+  53:main.c        ****     if( error == NO_ERROR ) {
+  98              		.loc 1 53 0
+  99 0050 50B9     		cbnz	r0, .L4
+  54:main.c        ****         sprintf(message, "CTRL_REG5 register value: 0x%02X [Expected value: 0x%02X]\r\n", check, co
+ 100              		.loc 1 54 0
+ 101 0052 4023     		movs	r3, #64
+ 102 0054 9DF8CF20 		ldrb	r2, [sp, #207]	@ zero_extendqisi2
+ 103 0058 5349     		ldr	r1, .L15+8
+ 104 005a 34A8     		add	r0, sp, #208
+ 105              	.LVL11:
+ 106 005c FFF7FEFF 		bl	sprintf
+ 107              	.LVL12:
+  55:main.c        ****         UART_1_PutString(message);
+ 108              		.loc 1 55 0
+ 109 0060 34A8     		add	r0, sp, #208
+ 110 0062 FFF7FEFF 		bl	UART_1_PutString
+ 111              	.LVL13:
+ 112 0066 02E0     		b	.L5
+ 113              	.LVL14:
+ 114              	.L4:
+  56:main.c        ****     }
+  57:main.c        ****     else {
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 4
+
+
+  58:main.c        ****         UART_1_PutString("I2C error while reading LIS3DH_WHO_AM_I_REG_ADDR\r\n");
+ 115              		.loc 1 58 0
+ 116 0068 5048     		ldr	r0, .L15+12
+ 117              	.LVL15:
+ 118 006a FFF7FEFF 		bl	UART_1_PutString
+ 119              	.LVL16:
+ 120              	.L5:
+  59:main.c        ****     }
+  60:main.c        ****         
+  61:main.c        **** 
+  62:main.c        ****     //select CTRL_REG1 activate High Power Mode 10 Hz and enable axis
+  63:main.c        ****     control_reg= 0x27;
+  64:main.c        ****     error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+ 121              		.loc 1 64 0
+ 122 006e 2722     		movs	r2, #39
+ 123 0070 2021     		movs	r1, #32
+ 124 0072 1820     		movs	r0, #24
+ 125 0074 FFF7FEFF 		bl	I2C_Peripheral_WriteRegister
+ 126              	.LVL17:
+  65:main.c        ****                                         LIS3DH_CTRL_REG1,
+  66:main.c        ****                                         control_reg);
+  67:main.c        ****     //reading CTRL_REG1
+  68:main.c        ****     uint8_t reg1;
+  69:main.c        ****     error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+ 127              		.loc 1 69 0
+ 128 0078 0DF1CE02 		add	r2, sp, #206
+ 129 007c 2021     		movs	r1, #32
+ 130 007e 1820     		movs	r0, #24
+ 131 0080 FFF7FEFF 		bl	I2C_Peripheral_ReadRegister
+ 132              	.LVL18:
+  70:main.c        ****                                         LIS3DH_CTRL_REG1,
+  71:main.c        ****                                         &reg1);
+  72:main.c        ****     if( error == NO_ERROR ) {
+ 133              		.loc 1 72 0
+ 134 0084 40B9     		cbnz	r0, .L6
+  73:main.c        ****         sprintf(message, "Valore CTRL_REG1 0x%02X\r\n", reg1);
+ 135              		.loc 1 73 0
+ 136 0086 9DF8CE20 		ldrb	r2, [sp, #206]	@ zero_extendqisi2
+ 137 008a 4949     		ldr	r1, .L15+16
+ 138 008c 34A8     		add	r0, sp, #208
+ 139              	.LVL19:
+ 140 008e FFF7FEFF 		bl	sprintf
+ 141              	.LVL20:
+  74:main.c        ****         UART_1_PutString(message);
+ 142              		.loc 1 74 0
+ 143 0092 34A8     		add	r0, sp, #208
+ 144 0094 FFF7FEFF 		bl	UART_1_PutString
+ 145              	.LVL21:
+ 146              	.L6:
+  75:main.c        ****         }
+  76:main.c        ****  
+  77:main.c        ****  
+  78:main.c        ****     //set full scale +/-2g (no change from default)    
+  79:main.c        ****     control_reg = 0x00;
+  80:main.c        ****     error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+ 147              		.loc 1 80 0
+ 148 0098 0022     		movs	r2, #0
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 5
+
+
+ 149 009a 2321     		movs	r1, #35
+ 150 009c 1820     		movs	r0, #24
+ 151 009e FFF7FEFF 		bl	I2C_Peripheral_WriteRegister
+ 152              	.LVL22:
+  81:main.c        ****                                          LIS3DH_CTRL_REG4,
+  82:main.c        ****                                          control_reg);
+  83:main.c        ****        
+  84:main.c        ****     //enable interrupt on pin INT1 --> CTRL_REG3, I1_OVERRUN=1
+  85:main.c        **** //    control_reg = 0x02;
+  86:main.c        **** //    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+  87:main.c        **** //                                         LIS3DH_CTRL_REG3,
+  88:main.c        **** //                                         control_reg);
+  89:main.c        **** //     
+  90:main.c        ****         
+  91:main.c        ****         
+  92:main.c        **** //    /*READ DATI*/
+  93:main.c        ****     
+  94:main.c        ****     uint8_t x_data[2];
+  95:main.c        ****     int out_x;
+  96:main.c        ****     float data_x;
+  97:main.c        ****     
+  98:main.c        ****     uint8_t y_data[2];
+  99:main.c        ****     int out_y;
+ 100:main.c        ****     float data_y;
+ 101:main.c        **** 
+ 102:main.c        ****     uint8_t z_data[2];
+ 103:main.c        ****     int out_z;
+ 104:main.c        ****     float data_z;
+ 105:main.c        **** 
+ 106:main.c        ****     uint8_t address;
+ 107:main.c        ****     uint8_t lis_data[192];
+ 108:main.c        ****     uint8_t overrun=0;
+ 153              		.loc 1 108 0
+ 154 00a2 0025     		movs	r5, #0
+ 155 00a4 8DF80B50 		strb	r5, [sp, #11]
+ 156              	.LVL23:
+ 109:main.c        ****     uint8_t accelerazioni=0;
+ 110:main.c        ****     uint8_t acc[192];
+ 111:main.c        ****     uint8_t remain=0, empty=0;
+ 157              		.loc 1 111 0
+ 158 00a8 8DF80A50 		strb	r5, [sp, #10]
+ 159 00ac 8DF80950 		strb	r5, [sp, #9]
+ 160              	.LVL24:
+ 161              	.L13:
+ 112:main.c        ****     uint8_t i=0, flag_dati =0;
+ 113:main.c        **** //    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+ 114:main.c        **** //                                        LIS3DH_CTRL_REG4,
+ 115:main.c        **** //                                        &address);
+ 116:main.c        **** //    if (error == NO_ERROR)
+ 117:main.c        **** //        {
+ 118:main.c        **** //            sprintf(message, "\r\nIl registro 0x%02X\r\n", address);
+ 119:main.c        **** //            UART_1_PutString(message);
+ 120:main.c        **** //        }
+ 121:main.c        ****     
+ 122:main.c        ****     
+ 123:main.c        ****     /*FINE READ DATI*/
+ 124:main.c        **** //        
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 6
+
+
+ 125:main.c        ****    for(;;)
+ 126:main.c        ****     {
+ 127:main.c        **** //        /* Place your application code here. */
+ 128:main.c        ****     
+ 129:main.c        **** //    //reset fifo: enable bypass mode
+ 130:main.c        **** //    control_reg = 0x00;
+ 131:main.c        **** //    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+ 132:main.c        **** //                                             LIS3DH_FIFO_CTRL_REG,
+ 133:main.c        **** //                                             control_reg);
+ 134:main.c        **** //        //check FIFO status: 0x20 if empty
+ 135:main.c        **** //    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+ 136:main.c        **** //                                        FIFO_SRC_REG,
+ 137:main.c        **** //                                        &address);
+ 138:main.c        ****         //controllo overrun 
+ 139:main.c        ****         error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+ 162              		.loc 1 139 0
+ 163 00b0 0DF10B02 		add	r2, sp, #11
+ 164 00b4 2F21     		movs	r1, #47
+ 165 00b6 1820     		movs	r0, #24
+ 166 00b8 FFF7FEFF 		bl	I2C_Peripheral_ReadRegister
+ 167              	.LVL25:
+ 140:main.c        ****                                         LIS3DH_FIFO_SRC_REG,
+ 141:main.c        ****                                         &overrun);
+ 142:main.c        ****        
+ 143:main.c        ****         //sprintf(message, "\r\nOverrun:  %d\r\n", overrun&0x40);
+ 144:main.c        ****         //UART_1_PutString(message);
+ 145:main.c        ****         
+ 146:main.c        ****         /*LETTURA DATI AD OGNI OVERRUN*/
+ 147:main.c        ****         if((overrun&0x40)==0x40)
+ 168              		.loc 1 147 0
+ 169 00bc 9DF80B30 		ldrb	r3, [sp, #11]	@ zero_extendqisi2
+ 170 00c0 13F0400F 		tst	r3, #64
+ 171 00c4 35D0     		beq	.L7
+ 148:main.c        ****         {
+ 149:main.c        ****             error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+ 172              		.loc 1 149 0
+ 173 00c6 0DF10902 		add	r2, sp, #9
+ 174 00ca 2F21     		movs	r1, #47
+ 175 00cc 1820     		movs	r0, #24
+ 176 00ce FFF7FEFF 		bl	I2C_Peripheral_ReadRegister
+ 177              	.LVL26:
+ 150:main.c        ****                                     LIS3DH_FIFO_SRC_REG,
+ 151:main.c        ****                                     &empty);
+ 152:main.c        ****                            
+ 153:main.c        ****                 sprintf(message, "FIFO overrun");
+ 178              		.loc 1 153 0
+ 179 00d2 384B     		ldr	r3, .L15+20
+ 180 00d4 34AC     		add	r4, sp, #208
+ 181 00d6 0FCB     		ldmia	r3, {r0, r1, r2, r3}
+ 182 00d8 07C4     		stmia	r4!, {r0, r1, r2}
+ 183 00da 2370     		strb	r3, [r4]
+ 154:main.c        ****                 UART_1_PutString(message);     
+ 184              		.loc 1 154 0
+ 185 00dc 34A8     		add	r0, sp, #208
+ 186 00de FFF7FEFF 		bl	UART_1_PutString
+ 187              	.LVL27:
+ 155:main.c        ****               while(~empty&0x20)
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 7
+
+
+ 188              		.loc 1 155 0
+ 189 00e2 21E0     		b	.L8
+ 190              	.L10:
+ 156:main.c        ****                 {
+ 157:main.c        **** 
+ 158:main.c        ****             //reset fifo: enable bypass mode
+ 159:main.c        **** //                    control_reg = LIS3DH_FIFO_CTRL_REG&0x3F;
+ 160:main.c        **** //                    error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+ 161:main.c        **** //                                                             LIS3DH_FIFO_CTRL_REG,
+ 162:main.c        **** //                                                             control_reg);
+ 163:main.c        **** 
+ 164:main.c        **** 
+ 165:main.c        ****                     //x 
+ 166:main.c        ****                     error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+ 191              		.loc 1 166 0
+ 192 00e4 03AB     		add	r3, sp, #12
+ 193 00e6 5A19     		adds	r2, r3, r5
+ 194 00e8 2821     		movs	r1, #40
+ 195 00ea 1820     		movs	r0, #24
+ 196 00ec FFF7FEFF 		bl	I2C_Peripheral_ReadRegister
+ 197              	.LVL28:
+ 167:main.c        ****                                                         LIS3DH_OUT_X_L,
+ 168:main.c        ****                                                         &lis_data[0+i]);
+ 169:main.c        ****                    
+ 170:main.c        ****                     
+ 171:main.c        **** 
+ 172:main.c        ****                 //Controllo quanti valori mancanti da leggere dalla FIFO
+ 173:main.c        ****                     error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+ 198              		.loc 1 173 0
+ 199 00f0 0DF10A02 		add	r2, sp, #10
+ 200 00f4 2F21     		movs	r1, #47
+ 201 00f6 1820     		movs	r0, #24
+ 202 00f8 FFF7FEFF 		bl	I2C_Peripheral_ReadRegister
+ 203              	.LVL29:
+ 174:main.c        ****                                         LIS3DH_FIFO_SRC_REG,
+ 175:main.c        ****                                         &remain);
+ 176:main.c        ****                     remain=remain&0x1F;
+ 204              		.loc 1 176 0
+ 205 00fc 9DF80A20 		ldrb	r2, [sp, #10]	@ zero_extendqisi2
+ 206 0100 02F01F02 		and	r2, r2, #31
+ 207 0104 8DF80A20 		strb	r2, [sp, #10]
+ 177:main.c        ****                     
+ 178:main.c        ****                         if( error == NO_ERROR ) {
+ 208              		.loc 1 178 0
+ 209 0108 30B9     		cbnz	r0, .L9
+ 179:main.c        ****                             sprintf(message, "Valore mancanti nella FIFO %d\r\n", remain);
+ 210              		.loc 1 179 0
+ 211 010a 2B49     		ldr	r1, .L15+24
+ 212 010c 34A8     		add	r0, sp, #208
+ 213              	.LVL30:
+ 214 010e FFF7FEFF 		bl	sprintf
+ 215              	.LVL31:
+ 180:main.c        ****                             UART_1_PutString(message);
+ 216              		.loc 1 180 0
+ 217 0112 34A8     		add	r0, sp, #208
+ 218 0114 FFF7FEFF 		bl	UART_1_PutString
+ 219              	.LVL32:
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 8
+
+
+ 220              	.L9:
+ 181:main.c        ****                             }
+ 182:main.c        ****                         i++;
+ 221              		.loc 1 182 0
+ 222 0118 0135     		adds	r5, r5, #1
+ 223              	.LVL33:
+ 224 011a EDB2     		uxtb	r5, r5
+ 225              	.LVL34:
+ 183:main.c        ****                         
+ 184:main.c        ****                         
+ 185:main.c        ****                         
+ 186:main.c        ****                     
+ 187:main.c        ****                     error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+ 226              		.loc 1 187 0
+ 227 011c 0DF10902 		add	r2, sp, #9
+ 228 0120 2F21     		movs	r1, #47
+ 229 0122 1820     		movs	r0, #24
+ 230 0124 FFF7FEFF 		bl	I2C_Peripheral_ReadRegister
+ 231              	.LVL35:
+ 232              	.L8:
+ 155:main.c        ****                 {
+ 233              		.loc 1 155 0
+ 234 0128 9DF80930 		ldrb	r3, [sp, #9]	@ zero_extendqisi2
+ 235 012c 13F0200F 		tst	r3, #32
+ 236 0130 D8D0     		beq	.L10
+ 237              	.L7:
+ 238              	.LVL36:
+ 188:main.c        ****                     LIS3DH_FIFO_SRC_REG,
+ 189:main.c        ****                     &empty);
+ 190:main.c        ****     
+ 191:main.c        ****                 }//fine while
+ 192:main.c        **** 
+ 193:main.c        ****                 
+ 194:main.c        ****        
+ 195:main.c        ****                             
+ 196:main.c        **** 
+ 197:main.c        ****                 
+ 198:main.c        ****             
+ 199:main.c        ****         }
+ 200:main.c        ****         /*fine overrun*/
+ 201:main.c        ****                   //reset fifo: enable bypass mode
+ 202:main.c        ****                 control_reg =0x00;
+ 203:main.c        ****                 error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+ 239              		.loc 1 203 0
+ 240 0132 0022     		movs	r2, #0
+ 241 0134 2E21     		movs	r1, #46
+ 242 0136 1820     		movs	r0, #24
+ 243 0138 FFF7FEFF 		bl	I2C_Peripheral_WriteRegister
+ 244              	.LVL37:
+ 204:main.c        ****                                                          LIS3DH_FIFO_CTRL_REG,
+ 205:main.c        ****                                                          control_reg);
+ 206:main.c        ****            //enable fifo mode  
+ 207:main.c        ****                 control_reg =0x40;
+ 208:main.c        ****                 error = I2C_Peripheral_WriteRegister(LIS3DH_DEVICE_ADDRESS,
+ 245              		.loc 1 208 0
+ 246 013c 4022     		movs	r2, #64
+ 247 013e 2E21     		movs	r1, #46
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 9
+
+
+ 248 0140 1820     		movs	r0, #24
+ 249 0142 FFF7FEFF 		bl	I2C_Peripheral_WriteRegister
+ 250              	.LVL38:
+ 209:main.c        ****                                                  LIS3DH_FIFO_CTRL_REG,
+ 210:main.c        ****                                                  control_reg);
+ 211:main.c        ****                 sprintf(message, "\r\nVALORI ACCELERAZIONE\r\n");
+ 251              		.loc 1 211 0
+ 252 0146 34AC     		add	r4, sp, #208
+ 253 0148 1C4E     		ldr	r6, .L15+28
+ 254 014a 0FCE     		ldmia	r6!, {r0, r1, r2, r3}
+ 255 014c 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 256 014e 96E80700 		ldmia	r6, {r0, r1, r2}
+ 257 0152 03C4     		stmia	r4!, {r0, r1}
+ 258 0154 2270     		strb	r2, [r4]
+ 212:main.c        ****                 UART_1_PutString(message);
+ 259              		.loc 1 212 0
+ 260 0156 34A8     		add	r0, sp, #208
+ 261 0158 FFF7FEFF 		bl	UART_1_PutString
+ 262              	.LVL39:
+ 263              	.LBB2:
+ 213:main.c        **** 
+ 214:main.c        ****             for(int i=0; i<192; i++)
+ 264              		.loc 1 214 0
+ 265 015c 0021     		movs	r1, #0
+ 266 015e 19E0     		b	.L11
+ 267              	.LVL40:
+ 268              	.L12:
+ 215:main.c        ****                 {
+ 216:main.c        ****                 sprintf(message, "\r\nx: %.3d, y: %.3d, z: %.3d\r\n", lis_data[i],
+ 269              		.loc 1 216 0 discriminator 3
+ 270 0160 3CAB     		add	r3, sp, #240
+ 271 0162 0B44     		add	r3, r3, r1
+ 272 0164 13F8E42C 		ldrb	r2, [r3, #-228]	@ zero_extendqisi2
+ 217:main.c        ****                  lis_data[i+1],
+ 273              		.loc 1 217 0 discriminator 3
+ 274 0168 4C1C     		adds	r4, r1, #1
+ 275 016a 3CAB     		add	r3, sp, #240
+ 276 016c 2344     		add	r3, r3, r4
+ 277 016e 13F8E43C 		ldrb	r3, [r3, #-228]	@ zero_extendqisi2
+ 218:main.c        ****                  lis_data[i+2]);
+ 278              		.loc 1 218 0 discriminator 3
+ 279 0172 0231     		adds	r1, r1, #2
+ 280              	.LVL41:
+ 281 0174 3CA8     		add	r0, sp, #240
+ 282 0176 0144     		add	r1, r1, r0
+ 283              	.LVL42:
+ 284 0178 11F8E41C 		ldrb	r1, [r1, #-228]	@ zero_extendqisi2
+ 216:main.c        ****                  lis_data[i+1],
+ 285              		.loc 1 216 0 discriminator 3
+ 286 017c 0091     		str	r1, [sp]
+ 287 017e 1049     		ldr	r1, .L15+32
+ 288 0180 34A8     		add	r0, sp, #208
+ 289 0182 FFF7FEFF 		bl	sprintf
+ 290              	.LVL43:
+ 219:main.c        ****                 UART_1_PutString(message);
+ 291              		.loc 1 219 0 discriminator 3
+ 292 0186 34A8     		add	r0, sp, #208
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 10
+
+
+ 293 0188 FFF7FEFF 		bl	UART_1_PutString
+ 294              	.LVL44:
+ 220:main.c        ****                 CyDelay(200);
+ 295              		.loc 1 220 0 discriminator 3
+ 296 018c C820     		movs	r0, #200
+ 297 018e FFF7FEFF 		bl	CyDelay
+ 298              	.LVL45:
+ 214:main.c        ****                 {
+ 299              		.loc 1 214 0 discriminator 3
+ 300 0192 2146     		mov	r1, r4
+ 301              	.LVL46:
+ 302              	.L11:
+ 214:main.c        ****                 {
+ 303              		.loc 1 214 0 is_stmt 0 discriminator 1
+ 304 0194 BF29     		cmp	r1, #191
+ 305 0196 E3DD     		ble	.L12
+ 306              	.LBE2:
+ 221:main.c        **** 
+ 222:main.c        ****                  }
+ 223:main.c        ****             
+ 224:main.c        ****             
+ 225:main.c        ****             
+ 226:main.c        ****             
+ 227:main.c        ****             
+ 228:main.c        **** //    
+ 229:main.c        **** //    error = I2C_Peripheral_ReadRegister(LIS3DH_DEVICE_ADDRESS,
+ 230:main.c        **** //                                        LIS3DH_STATUS_REG,
+ 231:main.c        **** //                                        &address);
+ 232:main.c        **** //    if (error == NO_ERROR)
+ 233:main.c        **** //        {
+ 234:main.c        **** //            sprintf(message, "\r\nStatus register 0x%02X\r\n", address);
+ 235:main.c        **** //            UART_1_PutString(message);
+ 236:main.c        **** //        }
+ 237:main.c        ****         
+ 238:main.c        **** 
+ 239:main.c        ****        CyDelay(100);
+ 307              		.loc 1 239 0 is_stmt 1
+ 308 0198 6420     		movs	r0, #100
+ 309 019a FFF7FEFF 		bl	CyDelay
+ 310              	.LVL47:
+ 240:main.c        ****         }
+ 311              		.loc 1 240 0
+ 312 019e 87E7     		b	.L13
+ 313              	.L16:
+ 314              		.align	2
+ 315              	.L15:
+ 316 01a0 00000000 		.word	.LC0
+ 317 01a4 14000000 		.word	.LC1
+ 318 01a8 50000000 		.word	.LC2
+ 319 01ac 8C000000 		.word	.LC3
+ 320 01b0 C0000000 		.word	.LC4
+ 321 01b4 DC000000 		.word	.LC5
+ 322 01b8 EC000000 		.word	.LC6
+ 323 01bc 0C010000 		.word	.LC7
+ 324 01c0 28010000 		.word	.LC8
+ 325              		.cfi_endproc
+ 326              	.LFE64:
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 11
+
+
+ 327              		.size	main, .-main
+ 328              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 329              		.align	2
+ 330              	.LC0:
+ 331 0000 4649464F 		.ascii	"FIFO_MODE enabled\015\012\000"
+ 331      5F4D4F44 
+ 331      4520656E 
+ 331      61626C65 
+ 331      640D0A00 
+ 332              	.LC1:
+ 333 0014 0D0A4572 		.ascii	"\015\012Error occured during I2C comm to set contro"
+ 333      726F7220 
+ 333      6F636375 
+ 333      72656420 
+ 333      64757269 
+ 334 0041 6C207265 		.ascii	"l register 1\015\012\000"
+ 334      67697374 
+ 334      65722031 
+ 334      0D0A00
+ 335              	.LC2:
+ 336 0050 4354524C 		.ascii	"CTRL_REG5 register value: 0x%02X [Expected value: 0"
+ 336      5F524547 
+ 336      35207265 
+ 336      67697374 
+ 336      65722076 
+ 337 0083 78253032 		.ascii	"x%02X]\015\012\000"
+ 337      585D0D0A 
+ 337      00
+ 338              	.LC3:
+ 339 008c 49324320 		.ascii	"I2C error while reading LIS3DH_WHO_AM_I_REG_ADDR\015"
+ 339      6572726F 
+ 339      72207768 
+ 339      696C6520 
+ 339      72656164 
+ 340 00bd 0A00     		.ascii	"\012\000"
+ 341 00bf 00       		.space	1
+ 342              	.LC4:
+ 343 00c0 56616C6F 		.ascii	"Valore CTRL_REG1 0x%02X\015\012\000"
+ 343      72652043 
+ 343      54524C5F 
+ 343      52454731 
+ 343      20307825 
+ 344 00da 0000     		.space	2
+ 345              	.LC5:
+ 346 00dc 4649464F 		.ascii	"FIFO overrun\000"
+ 346      206F7665 
+ 346      7272756E 
+ 346      00
+ 347 00e9 000000   		.space	3
+ 348              	.LC6:
+ 349 00ec 56616C6F 		.ascii	"Valore mancanti nella FIFO %d\015\012\000"
+ 349      7265206D 
+ 349      616E6361 
+ 349      6E746920 
+ 349      6E656C6C 
+ 350              	.LC7:
+ 351 010c 0D0A5641 		.ascii	"\015\012VALORI ACCELERAZIONE\015\012\000"
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 12
+
+
+ 351      4C4F5249 
+ 351      20414343 
+ 351      454C4552 
+ 351      415A494F 
+ 352 0125 000000   		.space	3
+ 353              	.LC8:
+ 354 0128 0D0A783A 		.ascii	"\015\012x: %.3d, y: %.3d, z: %.3d\015\012\000"
+ 354      20252E33 
+ 354      642C2079 
+ 354      3A20252E 
+ 354      33642C20 
+ 355              		.text
+ 356              	.Letext0:
+ 357              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 358              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 359              		.file 4 "../src_shared/ErrorCodes.h"
+ 360              		.file 5 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 361              		.file 6 "Generated_Source\\PSoC5/UART_1.h"
+ 362              		.file 7 "Generated_Source\\PSoC5/CyLib.h"
+ 363              		.file 8 "../src_shared/I2C_Interface.h"
+ 364              		.file 9 "Generated_Source\\PSoC5/core_cm3.h"
+ 365              		.section	.debug_info,"",%progbits
+ 366              	.Ldebug_info0:
+ 367 0000 D4050000 		.4byte	0x5d4
+ 368 0004 0400     		.2byte	0x4
+ 369 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 370 000a 04       		.byte	0x4
+ 371 000b 01       		.uleb128 0x1
+ 372 000c 7F000000 		.4byte	.LASF49
+ 373 0010 0C       		.byte	0xc
+ 374 0011 9C020000 		.4byte	.LASF50
+ 375 0015 63010000 		.4byte	.LASF51
+ 376 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 377 001d 00000000 		.4byte	0
+ 378 0021 00000000 		.4byte	.Ldebug_line0
+ 379 0025 02       		.uleb128 0x2
+ 380 0026 01       		.byte	0x1
+ 381 0027 06       		.byte	0x6
+ 382 0028 FE020000 		.4byte	.LASF0
+ 383 002c 03       		.uleb128 0x3
+ 384 002d 1F000000 		.4byte	.LASF4
+ 385 0031 02       		.byte	0x2
+ 386 0032 1D       		.byte	0x1d
+ 387 0033 37000000 		.4byte	0x37
+ 388 0037 02       		.uleb128 0x2
+ 389 0038 01       		.byte	0x1
+ 390 0039 08       		.byte	0x8
+ 391 003a 71000000 		.4byte	.LASF1
+ 392 003e 02       		.uleb128 0x2
+ 393 003f 02       		.byte	0x2
+ 394 0040 05       		.byte	0x5
+ 395 0041 D9020000 		.4byte	.LASF2
+ 396 0045 02       		.uleb128 0x2
+ 397 0046 02       		.byte	0x2
+ 398 0047 07       		.byte	0x7
+ 399 0048 26010000 		.4byte	.LASF3
+ 400 004c 03       		.uleb128 0x3
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 13
+
+
+ 401 004d 3B000000 		.4byte	.LASF5
+ 402 0051 02       		.byte	0x2
+ 403 0052 3F       		.byte	0x3f
+ 404 0053 57000000 		.4byte	0x57
+ 405 0057 02       		.uleb128 0x2
+ 406 0058 04       		.byte	0x4
+ 407 0059 05       		.byte	0x5
+ 408 005a 45000000 		.4byte	.LASF6
+ 409 005e 02       		.uleb128 0x2
+ 410 005f 04       		.byte	0x4
+ 411 0060 07       		.byte	0x7
+ 412 0061 14010000 		.4byte	.LASF7
+ 413 0065 02       		.uleb128 0x2
+ 414 0066 08       		.byte	0x8
+ 415 0067 05       		.byte	0x5
+ 416 0068 85020000 		.4byte	.LASF8
+ 417 006c 02       		.uleb128 0x2
+ 418 006d 08       		.byte	0x8
+ 419 006e 07       		.byte	0x7
+ 420 006f 3B020000 		.4byte	.LASF9
+ 421 0073 04       		.uleb128 0x4
+ 422 0074 04       		.byte	0x4
+ 423 0075 05       		.byte	0x5
+ 424 0076 696E7400 		.ascii	"int\000"
+ 425 007a 02       		.uleb128 0x2
+ 426 007b 04       		.byte	0x4
+ 427 007c 07       		.byte	0x7
+ 428 007d 26020000 		.4byte	.LASF10
+ 429 0081 02       		.uleb128 0x2
+ 430 0082 08       		.byte	0x8
+ 431 0083 04       		.byte	0x4
+ 432 0084 F2020000 		.4byte	.LASF11
+ 433 0088 02       		.uleb128 0x2
+ 434 0089 04       		.byte	0x4
+ 435 008a 07       		.byte	0x7
+ 436 008b 93020000 		.4byte	.LASF12
+ 437 008f 02       		.uleb128 0x2
+ 438 0090 01       		.byte	0x1
+ 439 0091 08       		.byte	0x8
+ 440 0092 A3020000 		.4byte	.LASF13
+ 441 0096 03       		.uleb128 0x3
+ 442 0097 52020000 		.4byte	.LASF14
+ 443 009b 03       		.byte	0x3
+ 444 009c 18       		.byte	0x18
+ 445 009d 2C000000 		.4byte	0x2c
+ 446 00a1 03       		.uleb128 0x3
+ 447 00a2 67020000 		.4byte	.LASF15
+ 448 00a6 03       		.byte	0x3
+ 449 00a7 2C       		.byte	0x2c
+ 450 00a8 4C000000 		.4byte	0x4c
+ 451 00ac 02       		.uleb128 0x2
+ 452 00ad 04       		.byte	0x4
+ 453 00ae 04       		.byte	0x4
+ 454 00af 66000000 		.4byte	.LASF16
+ 455 00b3 02       		.uleb128 0x2
+ 456 00b4 08       		.byte	0x8
+ 457 00b5 04       		.byte	0x4
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 14
+
+
+ 458 00b6 F9010000 		.4byte	.LASF17
+ 459 00ba 05       		.uleb128 0x5
+ 460 00bb 01       		.byte	0x1
+ 461 00bc 37000000 		.4byte	0x37
+ 462 00c0 04       		.byte	0x4
+ 463 00c1 15       		.byte	0x15
+ 464 00c2 D3000000 		.4byte	0xd3
+ 465 00c6 06       		.uleb128 0x6
+ 466 00c7 E3020000 		.4byte	.LASF18
+ 467 00cb 00       		.byte	0
+ 468 00cc 06       		.uleb128 0x6
+ 469 00cd EC020000 		.4byte	.LASF19
+ 470 00d1 01       		.byte	0x1
+ 471 00d2 00       		.byte	0
+ 472 00d3 03       		.uleb128 0x3
+ 473 00d4 56000000 		.4byte	.LASF20
+ 474 00d8 04       		.byte	0x4
+ 475 00d9 18       		.byte	0x18
+ 476 00da BA000000 		.4byte	0xba
+ 477 00de 07       		.uleb128 0x7
+ 478 00df 21020000 		.4byte	.LASF52
+ 479 00e3 01       		.byte	0x1
+ 480 00e4 0D       		.byte	0xd
+ 481 00e5 73000000 		.4byte	0x73
+ 482 00e9 00000000 		.4byte	.LFB64
+ 483 00ed C4010000 		.4byte	.LFE64-.LFB64
+ 484 00f1 01       		.uleb128 0x1
+ 485 00f2 9C       		.byte	0x9c
+ 486 00f3 49050000 		.4byte	0x549
+ 487 00f7 08       		.uleb128 0x8
+ 488 00f8 00000000 		.4byte	.LASF21
+ 489 00fc 01       		.byte	0x1
+ 490 00fd 18       		.byte	0x18
+ 491 00fe 49050000 		.4byte	0x549
+ 492 0102 02       		.uleb128 0x2
+ 493 0103 91       		.byte	0x91
+ 494 0104 50       		.sleb128 -48
+ 495 0105 09       		.uleb128 0x9
+ 496 0106 07020000 		.4byte	.LASF22
+ 497 010a 01       		.byte	0x1
+ 498 010b 19       		.byte	0x19
+ 499 010c 96000000 		.4byte	0x96
+ 500 0110 00000000 		.4byte	.LLST0
+ 501 0114 09       		.uleb128 0x9
+ 502 0115 7F020000 		.4byte	.LASF23
+ 503 0119 01       		.byte	0x1
+ 504 011a 1F       		.byte	0x1f
+ 505 011b D3000000 		.4byte	0xd3
+ 506 011f 47000000 		.4byte	.LLST1
+ 507 0123 08       		.uleb128 0x8
+ 508 0124 60000000 		.4byte	.LASF24
+ 509 0128 01       		.byte	0x1
+ 510 0129 31       		.byte	0x31
+ 511 012a 96000000 		.4byte	0x96
+ 512 012e 02       		.uleb128 0x2
+ 513 012f 91       		.byte	0x91
+ 514 0130 4F       		.sleb128 -49
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 15
+
+
+ 515 0131 08       		.uleb128 0x8
+ 516 0132 6C000000 		.4byte	.LASF25
+ 517 0136 01       		.byte	0x1
+ 518 0137 44       		.byte	0x44
+ 519 0138 96000000 		.4byte	0x96
+ 520 013c 02       		.uleb128 0x2
+ 521 013d 91       		.byte	0x91
+ 522 013e 4E       		.sleb128 -50
+ 523 013f 0A       		.uleb128 0xa
+ 524 0140 00020000 		.4byte	.LASF26
+ 525 0144 01       		.byte	0x1
+ 526 0145 5E       		.byte	0x5e
+ 527 0146 59050000 		.4byte	0x559
+ 528 014a 0A       		.uleb128 0xa
+ 529 014b 29000000 		.4byte	.LASF27
+ 530 014f 01       		.byte	0x1
+ 531 0150 5F       		.byte	0x5f
+ 532 0151 73000000 		.4byte	0x73
+ 533 0155 0A       		.uleb128 0xa
+ 534 0156 C4020000 		.4byte	.LASF28
+ 535 015a 01       		.byte	0x1
+ 536 015b 60       		.byte	0x60
+ 537 015c AC000000 		.4byte	0xac
+ 538 0160 0A       		.uleb128 0xa
+ 539 0161 0D010000 		.4byte	.LASF29
+ 540 0165 01       		.byte	0x1
+ 541 0166 62       		.byte	0x62
+ 542 0167 59050000 		.4byte	0x559
+ 543 016b 0A       		.uleb128 0xa
+ 544 016c 2F000000 		.4byte	.LASF30
+ 545 0170 01       		.byte	0x1
+ 546 0171 63       		.byte	0x63
+ 547 0172 73000000 		.4byte	0x73
+ 548 0176 0A       		.uleb128 0xa
+ 549 0177 CB020000 		.4byte	.LASF31
+ 550 017b 01       		.byte	0x1
+ 551 017c 64       		.byte	0x64
+ 552 017d AC000000 		.4byte	0xac
+ 553 0181 0A       		.uleb128 0xa
+ 554 0182 6F020000 		.4byte	.LASF32
+ 555 0186 01       		.byte	0x1
+ 556 0187 66       		.byte	0x66
+ 557 0188 59050000 		.4byte	0x559
+ 558 018c 0A       		.uleb128 0xa
+ 559 018d 35000000 		.4byte	.LASF33
+ 560 0191 01       		.byte	0x1
+ 561 0192 67       		.byte	0x67
+ 562 0193 73000000 		.4byte	0x73
+ 563 0197 0A       		.uleb128 0xa
+ 564 0198 D2020000 		.4byte	.LASF34
+ 565 019c 01       		.byte	0x1
+ 566 019d 68       		.byte	0x68
+ 567 019e AC000000 		.4byte	0xac
+ 568 01a2 0A       		.uleb128 0xa
+ 569 01a3 33020000 		.4byte	.LASF35
+ 570 01a7 01       		.byte	0x1
+ 571 01a8 6A       		.byte	0x6a
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 16
+
+
+ 572 01a9 96000000 		.4byte	0x96
+ 573 01ad 08       		.uleb128 0x8
+ 574 01ae 76020000 		.4byte	.LASF36
+ 575 01b2 01       		.byte	0x1
+ 576 01b3 6B       		.byte	0x6b
+ 577 01b4 69050000 		.4byte	0x569
+ 578 01b8 03       		.uleb128 0x3
+ 579 01b9 91       		.byte	0x91
+ 580 01ba 8C7E     		.sleb128 -244
+ 581 01bc 08       		.uleb128 0x8
+ 582 01bd 4E000000 		.4byte	.LASF37
+ 583 01c1 01       		.byte	0x1
+ 584 01c2 6C       		.byte	0x6c
+ 585 01c3 96000000 		.4byte	0x96
+ 586 01c7 03       		.uleb128 0x3
+ 587 01c8 91       		.byte	0x91
+ 588 01c9 8B7E     		.sleb128 -245
+ 589 01cb 0B       		.uleb128 0xb
+ 590 01cc 13020000 		.4byte	.LASF38
+ 591 01d0 01       		.byte	0x1
+ 592 01d1 6D       		.byte	0x6d
+ 593 01d2 96000000 		.4byte	0x96
+ 594 01d6 00       		.byte	0
+ 595 01d7 0C       		.uleb128 0xc
+ 596 01d8 61636300 		.ascii	"acc\000"
+ 597 01dc 01       		.byte	0x1
+ 598 01dd 6E       		.byte	0x6e
+ 599 01de 69050000 		.4byte	0x569
+ 600 01e2 08       		.uleb128 0x8
+ 601 01e3 5A020000 		.4byte	.LASF39
+ 602 01e7 01       		.byte	0x1
+ 603 01e8 6F       		.byte	0x6f
+ 604 01e9 96000000 		.4byte	0x96
+ 605 01ed 03       		.uleb128 0x3
+ 606 01ee 91       		.byte	0x91
+ 607 01ef 8A7E     		.sleb128 -246
+ 608 01f1 08       		.uleb128 0x8
+ 609 01f2 61020000 		.4byte	.LASF40
+ 610 01f6 01       		.byte	0x1
+ 611 01f7 6F       		.byte	0x6f
+ 612 01f8 96000000 		.4byte	0x96
+ 613 01fc 03       		.uleb128 0x3
+ 614 01fd 91       		.byte	0x91
+ 615 01fe 897E     		.sleb128 -247
+ 616 0200 0D       		.uleb128 0xd
+ 617 0201 6900     		.ascii	"i\000"
+ 618 0203 01       		.byte	0x1
+ 619 0204 70       		.byte	0x70
+ 620 0205 96000000 		.4byte	0x96
+ 621 0209 91000000 		.4byte	.LLST2
+ 622 020d 0B       		.uleb128 0xb
+ 623 020e 08000000 		.4byte	.LASF41
+ 624 0212 01       		.byte	0x1
+ 625 0213 70       		.byte	0x70
+ 626 0214 96000000 		.4byte	0x96
+ 627 0218 00       		.byte	0
+ 628 0219 0E       		.uleb128 0xe
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 17
+
+
+ 629 021a 5C010000 		.4byte	.LBB2
+ 630 021e 3C000000 		.4byte	.LBE2-.LBB2
+ 631 0222 75020000 		.4byte	0x275
+ 632 0226 0D       		.uleb128 0xd
+ 633 0227 6900     		.ascii	"i\000"
+ 634 0229 01       		.byte	0x1
+ 635 022a D6       		.byte	0xd6
+ 636 022b 73000000 		.4byte	0x73
+ 637 022f AF000000 		.4byte	.LLST3
+ 638 0233 0F       		.uleb128 0xf
+ 639 0234 86010000 		.4byte	.LVL43
+ 640 0238 8A050000 		.4byte	0x58a
+ 641 023c 50020000 		.4byte	0x250
+ 642 0240 10       		.uleb128 0x10
+ 643 0241 01       		.uleb128 0x1
+ 644 0242 50       		.byte	0x50
+ 645 0243 02       		.uleb128 0x2
+ 646 0244 91       		.byte	0x91
+ 647 0245 50       		.sleb128 -48
+ 648 0246 10       		.uleb128 0x10
+ 649 0247 01       		.uleb128 0x1
+ 650 0248 51       		.byte	0x51
+ 651 0249 05       		.uleb128 0x5
+ 652 024a 03       		.byte	0x3
+ 653 024b 28010000 		.4byte	.LC8
+ 654 024f 00       		.byte	0
+ 655 0250 0F       		.uleb128 0xf
+ 656 0251 8C010000 		.4byte	.LVL44
+ 657 0255 95050000 		.4byte	0x595
+ 658 0259 64020000 		.4byte	0x264
+ 659 025d 10       		.uleb128 0x10
+ 660 025e 01       		.uleb128 0x1
+ 661 025f 50       		.byte	0x50
+ 662 0260 02       		.uleb128 0x2
+ 663 0261 91       		.byte	0x91
+ 664 0262 50       		.sleb128 -48
+ 665 0263 00       		.byte	0
+ 666 0264 11       		.uleb128 0x11
+ 667 0265 92010000 		.4byte	.LVL45
+ 668 0269 A0050000 		.4byte	0x5a0
+ 669 026d 10       		.uleb128 0x10
+ 670 026e 01       		.uleb128 0x1
+ 671 026f 50       		.byte	0x50
+ 672 0270 02       		.uleb128 0x2
+ 673 0271 08       		.byte	0x8
+ 674 0272 C8       		.byte	0xc8
+ 675 0273 00       		.byte	0
+ 676 0274 00       		.byte	0
+ 677 0275 12       		.uleb128 0x12
+ 678 0276 0A000000 		.4byte	.LVL0
+ 679 027a AB050000 		.4byte	0x5ab
+ 680 027e 12       		.uleb128 0x12
+ 681 027f 0E000000 		.4byte	.LVL1
+ 682 0283 B6050000 		.4byte	0x5b6
+ 683 0287 0F       		.uleb128 0xf
+ 684 0288 14000000 		.4byte	.LVL2
+ 685 028c A0050000 		.4byte	0x5a0
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 18
+
+
+ 686 0290 9A020000 		.4byte	0x29a
+ 687 0294 10       		.uleb128 0x10
+ 688 0295 01       		.uleb128 0x1
+ 689 0296 50       		.byte	0x50
+ 690 0297 01       		.uleb128 0x1
+ 691 0298 35       		.byte	0x35
+ 692 0299 00       		.byte	0
+ 693 029a 0F       		.uleb128 0xf
+ 694 029b 1E000000 		.4byte	.LVL3
+ 695 029f C1050000 		.4byte	0x5c1
+ 696 02a3 B9020000 		.4byte	0x2b9
+ 697 02a7 10       		.uleb128 0x10
+ 698 02a8 01       		.uleb128 0x1
+ 699 02a9 50       		.byte	0x50
+ 700 02aa 01       		.uleb128 0x1
+ 701 02ab 48       		.byte	0x48
+ 702 02ac 10       		.uleb128 0x10
+ 703 02ad 01       		.uleb128 0x1
+ 704 02ae 51       		.byte	0x51
+ 705 02af 02       		.uleb128 0x2
+ 706 02b0 08       		.byte	0x8
+ 707 02b1 2E       		.byte	0x2e
+ 708 02b2 10       		.uleb128 0x10
+ 709 02b3 01       		.uleb128 0x1
+ 710 02b4 52       		.byte	0x52
+ 711 02b5 02       		.uleb128 0x2
+ 712 02b6 08       		.byte	0x8
+ 713 02b7 40       		.byte	0x40
+ 714 02b8 00       		.byte	0
+ 715 02b9 0F       		.uleb128 0xf
+ 716 02ba 28000000 		.4byte	.LVL4
+ 717 02be C1050000 		.4byte	0x5c1
+ 718 02c2 D8020000 		.4byte	0x2d8
+ 719 02c6 10       		.uleb128 0x10
+ 720 02c7 01       		.uleb128 0x1
+ 721 02c8 50       		.byte	0x50
+ 722 02c9 01       		.uleb128 0x1
+ 723 02ca 48       		.byte	0x48
+ 724 02cb 10       		.uleb128 0x10
+ 725 02cc 01       		.uleb128 0x1
+ 726 02cd 51       		.byte	0x51
+ 727 02ce 02       		.uleb128 0x2
+ 728 02cf 08       		.byte	0x8
+ 729 02d0 24       		.byte	0x24
+ 730 02d1 10       		.uleb128 0x10
+ 731 02d2 01       		.uleb128 0x1
+ 732 02d3 52       		.byte	0x52
+ 733 02d4 02       		.uleb128 0x2
+ 734 02d5 08       		.byte	0x8
+ 735 02d6 40       		.byte	0x40
+ 736 02d7 00       		.byte	0
+ 737 02d8 0F       		.uleb128 0xf
+ 738 02d9 3C000000 		.4byte	.LVL6
+ 739 02dd 95050000 		.4byte	0x595
+ 740 02e1 EC020000 		.4byte	0x2ec
+ 741 02e5 10       		.uleb128 0x10
+ 742 02e6 01       		.uleb128 0x1
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 19
+
+
+ 743 02e7 50       		.byte	0x50
+ 744 02e8 02       		.uleb128 0x2
+ 745 02e9 74       		.byte	0x74
+ 746 02ea 70       		.sleb128 -16
+ 747 02eb 00       		.byte	0
+ 748 02ec 0F       		.uleb128 0xf
+ 749 02ed 44000000 		.4byte	.LVL9
+ 750 02f1 95050000 		.4byte	0x595
+ 751 02f5 03030000 		.4byte	0x303
+ 752 02f9 10       		.uleb128 0x10
+ 753 02fa 01       		.uleb128 0x1
+ 754 02fb 50       		.byte	0x50
+ 755 02fc 05       		.uleb128 0x5
+ 756 02fd 03       		.byte	0x3
+ 757 02fe 14000000 		.4byte	.LC1
+ 758 0302 00       		.byte	0
+ 759 0303 0F       		.uleb128 0xf
+ 760 0304 50000000 		.4byte	.LVL10
+ 761 0308 CC050000 		.4byte	0x5cc
+ 762 030c 22030000 		.4byte	0x322
+ 763 0310 10       		.uleb128 0x10
+ 764 0311 01       		.uleb128 0x1
+ 765 0312 50       		.byte	0x50
+ 766 0313 01       		.uleb128 0x1
+ 767 0314 48       		.byte	0x48
+ 768 0315 10       		.uleb128 0x10
+ 769 0316 01       		.uleb128 0x1
+ 770 0317 51       		.byte	0x51
+ 771 0318 02       		.uleb128 0x2
+ 772 0319 08       		.byte	0x8
+ 773 031a 24       		.byte	0x24
+ 774 031b 10       		.uleb128 0x10
+ 775 031c 01       		.uleb128 0x1
+ 776 031d 52       		.byte	0x52
+ 777 031e 02       		.uleb128 0x2
+ 778 031f 91       		.byte	0x91
+ 779 0320 4F       		.sleb128 -49
+ 780 0321 00       		.byte	0
+ 781 0322 0F       		.uleb128 0xf
+ 782 0323 60000000 		.4byte	.LVL12
+ 783 0327 8A050000 		.4byte	0x58a
+ 784 032b 45030000 		.4byte	0x345
+ 785 032f 10       		.uleb128 0x10
+ 786 0330 01       		.uleb128 0x1
+ 787 0331 50       		.byte	0x50
+ 788 0332 02       		.uleb128 0x2
+ 789 0333 91       		.byte	0x91
+ 790 0334 50       		.sleb128 -48
+ 791 0335 10       		.uleb128 0x10
+ 792 0336 01       		.uleb128 0x1
+ 793 0337 51       		.byte	0x51
+ 794 0338 05       		.uleb128 0x5
+ 795 0339 03       		.byte	0x3
+ 796 033a 50000000 		.4byte	.LC2
+ 797 033e 10       		.uleb128 0x10
+ 798 033f 01       		.uleb128 0x1
+ 799 0340 53       		.byte	0x53
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 20
+
+
+ 800 0341 02       		.uleb128 0x2
+ 801 0342 08       		.byte	0x8
+ 802 0343 40       		.byte	0x40
+ 803 0344 00       		.byte	0
+ 804 0345 0F       		.uleb128 0xf
+ 805 0346 66000000 		.4byte	.LVL13
+ 806 034a 95050000 		.4byte	0x595
+ 807 034e 59030000 		.4byte	0x359
+ 808 0352 10       		.uleb128 0x10
+ 809 0353 01       		.uleb128 0x1
+ 810 0354 50       		.byte	0x50
+ 811 0355 02       		.uleb128 0x2
+ 812 0356 91       		.byte	0x91
+ 813 0357 50       		.sleb128 -48
+ 814 0358 00       		.byte	0
+ 815 0359 0F       		.uleb128 0xf
+ 816 035a 6E000000 		.4byte	.LVL16
+ 817 035e 95050000 		.4byte	0x595
+ 818 0362 70030000 		.4byte	0x370
+ 819 0366 10       		.uleb128 0x10
+ 820 0367 01       		.uleb128 0x1
+ 821 0368 50       		.byte	0x50
+ 822 0369 05       		.uleb128 0x5
+ 823 036a 03       		.byte	0x3
+ 824 036b 8C000000 		.4byte	.LC3
+ 825 036f 00       		.byte	0
+ 826 0370 0F       		.uleb128 0xf
+ 827 0371 78000000 		.4byte	.LVL17
+ 828 0375 C1050000 		.4byte	0x5c1
+ 829 0379 8F030000 		.4byte	0x38f
+ 830 037d 10       		.uleb128 0x10
+ 831 037e 01       		.uleb128 0x1
+ 832 037f 50       		.byte	0x50
+ 833 0380 01       		.uleb128 0x1
+ 834 0381 48       		.byte	0x48
+ 835 0382 10       		.uleb128 0x10
+ 836 0383 01       		.uleb128 0x1
+ 837 0384 51       		.byte	0x51
+ 838 0385 02       		.uleb128 0x2
+ 839 0386 08       		.byte	0x8
+ 840 0387 20       		.byte	0x20
+ 841 0388 10       		.uleb128 0x10
+ 842 0389 01       		.uleb128 0x1
+ 843 038a 52       		.byte	0x52
+ 844 038b 02       		.uleb128 0x2
+ 845 038c 08       		.byte	0x8
+ 846 038d 27       		.byte	0x27
+ 847 038e 00       		.byte	0
+ 848 038f 0F       		.uleb128 0xf
+ 849 0390 84000000 		.4byte	.LVL18
+ 850 0394 CC050000 		.4byte	0x5cc
+ 851 0398 AE030000 		.4byte	0x3ae
+ 852 039c 10       		.uleb128 0x10
+ 853 039d 01       		.uleb128 0x1
+ 854 039e 50       		.byte	0x50
+ 855 039f 01       		.uleb128 0x1
+ 856 03a0 48       		.byte	0x48
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 21
+
+
+ 857 03a1 10       		.uleb128 0x10
+ 858 03a2 01       		.uleb128 0x1
+ 859 03a3 51       		.byte	0x51
+ 860 03a4 02       		.uleb128 0x2
+ 861 03a5 08       		.byte	0x8
+ 862 03a6 20       		.byte	0x20
+ 863 03a7 10       		.uleb128 0x10
+ 864 03a8 01       		.uleb128 0x1
+ 865 03a9 52       		.byte	0x52
+ 866 03aa 02       		.uleb128 0x2
+ 867 03ab 91       		.byte	0x91
+ 868 03ac 4E       		.sleb128 -50
+ 869 03ad 00       		.byte	0
+ 870 03ae 0F       		.uleb128 0xf
+ 871 03af 92000000 		.4byte	.LVL20
+ 872 03b3 8A050000 		.4byte	0x58a
+ 873 03b7 CB030000 		.4byte	0x3cb
+ 874 03bb 10       		.uleb128 0x10
+ 875 03bc 01       		.uleb128 0x1
+ 876 03bd 50       		.byte	0x50
+ 877 03be 02       		.uleb128 0x2
+ 878 03bf 91       		.byte	0x91
+ 879 03c0 50       		.sleb128 -48
+ 880 03c1 10       		.uleb128 0x10
+ 881 03c2 01       		.uleb128 0x1
+ 882 03c3 51       		.byte	0x51
+ 883 03c4 05       		.uleb128 0x5
+ 884 03c5 03       		.byte	0x3
+ 885 03c6 C0000000 		.4byte	.LC4
+ 886 03ca 00       		.byte	0
+ 887 03cb 0F       		.uleb128 0xf
+ 888 03cc 98000000 		.4byte	.LVL21
+ 889 03d0 95050000 		.4byte	0x595
+ 890 03d4 DF030000 		.4byte	0x3df
+ 891 03d8 10       		.uleb128 0x10
+ 892 03d9 01       		.uleb128 0x1
+ 893 03da 50       		.byte	0x50
+ 894 03db 02       		.uleb128 0x2
+ 895 03dc 91       		.byte	0x91
+ 896 03dd 50       		.sleb128 -48
+ 897 03de 00       		.byte	0
+ 898 03df 0F       		.uleb128 0xf
+ 899 03e0 A2000000 		.4byte	.LVL22
+ 900 03e4 C1050000 		.4byte	0x5c1
+ 901 03e8 FD030000 		.4byte	0x3fd
+ 902 03ec 10       		.uleb128 0x10
+ 903 03ed 01       		.uleb128 0x1
+ 904 03ee 50       		.byte	0x50
+ 905 03ef 01       		.uleb128 0x1
+ 906 03f0 48       		.byte	0x48
+ 907 03f1 10       		.uleb128 0x10
+ 908 03f2 01       		.uleb128 0x1
+ 909 03f3 51       		.byte	0x51
+ 910 03f4 02       		.uleb128 0x2
+ 911 03f5 08       		.byte	0x8
+ 912 03f6 23       		.byte	0x23
+ 913 03f7 10       		.uleb128 0x10
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 22
+
+
+ 914 03f8 01       		.uleb128 0x1
+ 915 03f9 52       		.byte	0x52
+ 916 03fa 01       		.uleb128 0x1
+ 917 03fb 30       		.byte	0x30
+ 918 03fc 00       		.byte	0
+ 919 03fd 0F       		.uleb128 0xf
+ 920 03fe BC000000 		.4byte	.LVL25
+ 921 0402 CC050000 		.4byte	0x5cc
+ 922 0406 1D040000 		.4byte	0x41d
+ 923 040a 10       		.uleb128 0x10
+ 924 040b 01       		.uleb128 0x1
+ 925 040c 50       		.byte	0x50
+ 926 040d 01       		.uleb128 0x1
+ 927 040e 48       		.byte	0x48
+ 928 040f 10       		.uleb128 0x10
+ 929 0410 01       		.uleb128 0x1
+ 930 0411 51       		.byte	0x51
+ 931 0412 02       		.uleb128 0x2
+ 932 0413 08       		.byte	0x8
+ 933 0414 2F       		.byte	0x2f
+ 934 0415 10       		.uleb128 0x10
+ 935 0416 01       		.uleb128 0x1
+ 936 0417 52       		.byte	0x52
+ 937 0418 03       		.uleb128 0x3
+ 938 0419 91       		.byte	0x91
+ 939 041a 8B7E     		.sleb128 -245
+ 940 041c 00       		.byte	0
+ 941 041d 0F       		.uleb128 0xf
+ 942 041e D2000000 		.4byte	.LVL26
+ 943 0422 CC050000 		.4byte	0x5cc
+ 944 0426 3D040000 		.4byte	0x43d
+ 945 042a 10       		.uleb128 0x10
+ 946 042b 01       		.uleb128 0x1
+ 947 042c 50       		.byte	0x50
+ 948 042d 01       		.uleb128 0x1
+ 949 042e 48       		.byte	0x48
+ 950 042f 10       		.uleb128 0x10
+ 951 0430 01       		.uleb128 0x1
+ 952 0431 51       		.byte	0x51
+ 953 0432 02       		.uleb128 0x2
+ 954 0433 08       		.byte	0x8
+ 955 0434 2F       		.byte	0x2f
+ 956 0435 10       		.uleb128 0x10
+ 957 0436 01       		.uleb128 0x1
+ 958 0437 52       		.byte	0x52
+ 959 0438 03       		.uleb128 0x3
+ 960 0439 91       		.byte	0x91
+ 961 043a 897E     		.sleb128 -247
+ 962 043c 00       		.byte	0
+ 963 043d 0F       		.uleb128 0xf
+ 964 043e E2000000 		.4byte	.LVL27
+ 965 0442 95050000 		.4byte	0x595
+ 966 0446 51040000 		.4byte	0x451
+ 967 044a 10       		.uleb128 0x10
+ 968 044b 01       		.uleb128 0x1
+ 969 044c 50       		.byte	0x50
+ 970 044d 02       		.uleb128 0x2
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 23
+
+
+ 971 044e 74       		.byte	0x74
+ 972 044f 74       		.sleb128 -12
+ 973 0450 00       		.byte	0
+ 974 0451 0F       		.uleb128 0xf
+ 975 0452 F0000000 		.4byte	.LVL28
+ 976 0456 CC050000 		.4byte	0x5cc
+ 977 045a 76040000 		.4byte	0x476
+ 978 045e 10       		.uleb128 0x10
+ 979 045f 01       		.uleb128 0x1
+ 980 0460 50       		.byte	0x50
+ 981 0461 01       		.uleb128 0x1
+ 982 0462 48       		.byte	0x48
+ 983 0463 10       		.uleb128 0x10
+ 984 0464 01       		.uleb128 0x1
+ 985 0465 51       		.byte	0x51
+ 986 0466 02       		.uleb128 0x2
+ 987 0467 08       		.byte	0x8
+ 988 0468 28       		.byte	0x28
+ 989 0469 10       		.uleb128 0x10
+ 990 046a 01       		.uleb128 0x1
+ 991 046b 52       		.byte	0x52
+ 992 046c 08       		.uleb128 0x8
+ 993 046d 91       		.byte	0x91
+ 994 046e 00       		.sleb128 0
+ 995 046f 75       		.byte	0x75
+ 996 0470 00       		.sleb128 0
+ 997 0471 22       		.byte	0x22
+ 998 0472 08       		.byte	0x8
+ 999 0473 F4       		.byte	0xf4
+ 1000 0474 1C       		.byte	0x1c
+ 1001 0475 00       		.byte	0
+ 1002 0476 0F       		.uleb128 0xf
+ 1003 0477 FC000000 		.4byte	.LVL29
+ 1004 047b CC050000 		.4byte	0x5cc
+ 1005 047f 96040000 		.4byte	0x496
+ 1006 0483 10       		.uleb128 0x10
+ 1007 0484 01       		.uleb128 0x1
+ 1008 0485 50       		.byte	0x50
+ 1009 0486 01       		.uleb128 0x1
+ 1010 0487 48       		.byte	0x48
+ 1011 0488 10       		.uleb128 0x10
+ 1012 0489 01       		.uleb128 0x1
+ 1013 048a 51       		.byte	0x51
+ 1014 048b 02       		.uleb128 0x2
+ 1015 048c 08       		.byte	0x8
+ 1016 048d 2F       		.byte	0x2f
+ 1017 048e 10       		.uleb128 0x10
+ 1018 048f 01       		.uleb128 0x1
+ 1019 0490 52       		.byte	0x52
+ 1020 0491 03       		.uleb128 0x3
+ 1021 0492 91       		.byte	0x91
+ 1022 0493 8A7E     		.sleb128 -246
+ 1023 0495 00       		.byte	0
+ 1024 0496 0F       		.uleb128 0xf
+ 1025 0497 12010000 		.4byte	.LVL31
+ 1026 049b 8A050000 		.4byte	0x58a
+ 1027 049f B3040000 		.4byte	0x4b3
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 24
+
+
+ 1028 04a3 10       		.uleb128 0x10
+ 1029 04a4 01       		.uleb128 0x1
+ 1030 04a5 50       		.byte	0x50
+ 1031 04a6 02       		.uleb128 0x2
+ 1032 04a7 74       		.byte	0x74
+ 1033 04a8 74       		.sleb128 -12
+ 1034 04a9 10       		.uleb128 0x10
+ 1035 04aa 01       		.uleb128 0x1
+ 1036 04ab 51       		.byte	0x51
+ 1037 04ac 05       		.uleb128 0x5
+ 1038 04ad 03       		.byte	0x3
+ 1039 04ae EC000000 		.4byte	.LC6
+ 1040 04b2 00       		.byte	0
+ 1041 04b3 0F       		.uleb128 0xf
+ 1042 04b4 18010000 		.4byte	.LVL32
+ 1043 04b8 95050000 		.4byte	0x595
+ 1044 04bc C7040000 		.4byte	0x4c7
+ 1045 04c0 10       		.uleb128 0x10
+ 1046 04c1 01       		.uleb128 0x1
+ 1047 04c2 50       		.byte	0x50
+ 1048 04c3 02       		.uleb128 0x2
+ 1049 04c4 74       		.byte	0x74
+ 1050 04c5 74       		.sleb128 -12
+ 1051 04c6 00       		.byte	0
+ 1052 04c7 0F       		.uleb128 0xf
+ 1053 04c8 28010000 		.4byte	.LVL35
+ 1054 04cc CC050000 		.4byte	0x5cc
+ 1055 04d0 E7040000 		.4byte	0x4e7
+ 1056 04d4 10       		.uleb128 0x10
+ 1057 04d5 01       		.uleb128 0x1
+ 1058 04d6 50       		.byte	0x50
+ 1059 04d7 01       		.uleb128 0x1
+ 1060 04d8 48       		.byte	0x48
+ 1061 04d9 10       		.uleb128 0x10
+ 1062 04da 01       		.uleb128 0x1
+ 1063 04db 51       		.byte	0x51
+ 1064 04dc 02       		.uleb128 0x2
+ 1065 04dd 08       		.byte	0x8
+ 1066 04de 2F       		.byte	0x2f
+ 1067 04df 10       		.uleb128 0x10
+ 1068 04e0 01       		.uleb128 0x1
+ 1069 04e1 52       		.byte	0x52
+ 1070 04e2 03       		.uleb128 0x3
+ 1071 04e3 91       		.byte	0x91
+ 1072 04e4 897E     		.sleb128 -247
+ 1073 04e6 00       		.byte	0
+ 1074 04e7 0F       		.uleb128 0xf
+ 1075 04e8 3C010000 		.4byte	.LVL37
+ 1076 04ec C1050000 		.4byte	0x5c1
+ 1077 04f0 05050000 		.4byte	0x505
+ 1078 04f4 10       		.uleb128 0x10
+ 1079 04f5 01       		.uleb128 0x1
+ 1080 04f6 50       		.byte	0x50
+ 1081 04f7 01       		.uleb128 0x1
+ 1082 04f8 48       		.byte	0x48
+ 1083 04f9 10       		.uleb128 0x10
+ 1084 04fa 01       		.uleb128 0x1
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 25
+
+
+ 1085 04fb 51       		.byte	0x51
+ 1086 04fc 02       		.uleb128 0x2
+ 1087 04fd 08       		.byte	0x8
+ 1088 04fe 2E       		.byte	0x2e
+ 1089 04ff 10       		.uleb128 0x10
+ 1090 0500 01       		.uleb128 0x1
+ 1091 0501 52       		.byte	0x52
+ 1092 0502 01       		.uleb128 0x1
+ 1093 0503 30       		.byte	0x30
+ 1094 0504 00       		.byte	0
+ 1095 0505 0F       		.uleb128 0xf
+ 1096 0506 46010000 		.4byte	.LVL38
+ 1097 050a C1050000 		.4byte	0x5c1
+ 1098 050e 24050000 		.4byte	0x524
+ 1099 0512 10       		.uleb128 0x10
+ 1100 0513 01       		.uleb128 0x1
+ 1101 0514 50       		.byte	0x50
+ 1102 0515 01       		.uleb128 0x1
+ 1103 0516 48       		.byte	0x48
+ 1104 0517 10       		.uleb128 0x10
+ 1105 0518 01       		.uleb128 0x1
+ 1106 0519 51       		.byte	0x51
+ 1107 051a 02       		.uleb128 0x2
+ 1108 051b 08       		.byte	0x8
+ 1109 051c 2E       		.byte	0x2e
+ 1110 051d 10       		.uleb128 0x10
+ 1111 051e 01       		.uleb128 0x1
+ 1112 051f 52       		.byte	0x52
+ 1113 0520 02       		.uleb128 0x2
+ 1114 0521 08       		.byte	0x8
+ 1115 0522 40       		.byte	0x40
+ 1116 0523 00       		.byte	0
+ 1117 0524 0F       		.uleb128 0xf
+ 1118 0525 5C010000 		.4byte	.LVL39
+ 1119 0529 95050000 		.4byte	0x595
+ 1120 052d 38050000 		.4byte	0x538
+ 1121 0531 10       		.uleb128 0x10
+ 1122 0532 01       		.uleb128 0x1
+ 1123 0533 50       		.byte	0x50
+ 1124 0534 02       		.uleb128 0x2
+ 1125 0535 74       		.byte	0x74
+ 1126 0536 68       		.sleb128 -24
+ 1127 0537 00       		.byte	0
+ 1128 0538 11       		.uleb128 0x11
+ 1129 0539 9E010000 		.4byte	.LVL47
+ 1130 053d A0050000 		.4byte	0x5a0
+ 1131 0541 10       		.uleb128 0x10
+ 1132 0542 01       		.uleb128 0x1
+ 1133 0543 50       		.byte	0x50
+ 1134 0544 02       		.uleb128 0x2
+ 1135 0545 08       		.byte	0x8
+ 1136 0546 64       		.byte	0x64
+ 1137 0547 00       		.byte	0
+ 1138 0548 00       		.byte	0
+ 1139 0549 13       		.uleb128 0x13
+ 1140 054a 8F000000 		.4byte	0x8f
+ 1141 054e 59050000 		.4byte	0x559
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 26
+
+
+ 1142 0552 14       		.uleb128 0x14
+ 1143 0553 88000000 		.4byte	0x88
+ 1144 0557 1F       		.byte	0x1f
+ 1145 0558 00       		.byte	0
+ 1146 0559 13       		.uleb128 0x13
+ 1147 055a 96000000 		.4byte	0x96
+ 1148 055e 69050000 		.4byte	0x569
+ 1149 0562 14       		.uleb128 0x14
+ 1150 0563 88000000 		.4byte	0x88
+ 1151 0567 01       		.byte	0x1
+ 1152 0568 00       		.byte	0
+ 1153 0569 13       		.uleb128 0x13
+ 1154 056a 96000000 		.4byte	0x96
+ 1155 056e 79050000 		.4byte	0x579
+ 1156 0572 14       		.uleb128 0x14
+ 1157 0573 88000000 		.4byte	0x88
+ 1158 0577 BF       		.byte	0xbf
+ 1159 0578 00       		.byte	0
+ 1160 0579 15       		.uleb128 0x15
+ 1161 057a 56010000 		.4byte	.LASF53
+ 1162 057e 09       		.byte	0x9
+ 1163 057f 1207     		.2byte	0x712
+ 1164 0581 85050000 		.4byte	0x585
+ 1165 0585 16       		.uleb128 0x16
+ 1166 0586 A1000000 		.4byte	0xa1
+ 1167 058a 17       		.uleb128 0x17
+ 1168 058b 1B030000 		.4byte	.LASF42
+ 1169 058f 1B030000 		.4byte	.LASF42
+ 1170 0593 05       		.byte	0x5
+ 1171 0594 E7       		.byte	0xe7
+ 1172 0595 17       		.uleb128 0x17
+ 1173 0596 0A030000 		.4byte	.LASF43
+ 1174 059a 0A030000 		.4byte	.LASF43
+ 1175 059e 06       		.byte	0x6
+ 1176 059f 8B       		.byte	0x8b
+ 1177 05a0 17       		.uleb128 0x17
+ 1178 05a1 23030000 		.4byte	.LASF44
+ 1179 05a5 23030000 		.4byte	.LASF44
+ 1180 05a9 07       		.byte	0x7
+ 1181 05aa 76       		.byte	0x76
+ 1182 05ab 17       		.uleb128 0x17
+ 1183 05ac 2B030000 		.4byte	.LASF45
+ 1184 05b0 2B030000 		.4byte	.LASF45
+ 1185 05b4 08       		.byte	0x8
+ 1186 05b5 17       		.byte	0x17
+ 1187 05b6 17       		.uleb128 0x17
+ 1188 05b7 12000000 		.4byte	.LASF46
+ 1189 05bb 12000000 		.4byte	.LASF46
+ 1190 05bf 06       		.byte	0x6
+ 1191 05c0 54       		.byte	0x54
+ 1192 05c1 17       		.uleb128 0x17
+ 1193 05c2 39010000 		.4byte	.LASF47
+ 1194 05c6 39010000 		.4byte	.LASF47
+ 1195 05ca 08       		.byte	0x8
+ 1196 05cb 43       		.byte	0x43
+ 1197 05cc 17       		.uleb128 0x17
+ 1198 05cd A8020000 		.4byte	.LASF48
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 27
+
+
+ 1199 05d1 A8020000 		.4byte	.LASF48
+ 1200 05d5 08       		.byte	0x8
+ 1201 05d6 28       		.byte	0x28
+ 1202 05d7 00       		.byte	0
+ 1203              		.section	.debug_abbrev,"",%progbits
+ 1204              	.Ldebug_abbrev0:
+ 1205 0000 01       		.uleb128 0x1
+ 1206 0001 11       		.uleb128 0x11
+ 1207 0002 01       		.byte	0x1
+ 1208 0003 25       		.uleb128 0x25
+ 1209 0004 0E       		.uleb128 0xe
+ 1210 0005 13       		.uleb128 0x13
+ 1211 0006 0B       		.uleb128 0xb
+ 1212 0007 03       		.uleb128 0x3
+ 1213 0008 0E       		.uleb128 0xe
+ 1214 0009 1B       		.uleb128 0x1b
+ 1215 000a 0E       		.uleb128 0xe
+ 1216 000b 55       		.uleb128 0x55
+ 1217 000c 17       		.uleb128 0x17
+ 1218 000d 11       		.uleb128 0x11
+ 1219 000e 01       		.uleb128 0x1
+ 1220 000f 10       		.uleb128 0x10
+ 1221 0010 17       		.uleb128 0x17
+ 1222 0011 00       		.byte	0
+ 1223 0012 00       		.byte	0
+ 1224 0013 02       		.uleb128 0x2
+ 1225 0014 24       		.uleb128 0x24
+ 1226 0015 00       		.byte	0
+ 1227 0016 0B       		.uleb128 0xb
+ 1228 0017 0B       		.uleb128 0xb
+ 1229 0018 3E       		.uleb128 0x3e
+ 1230 0019 0B       		.uleb128 0xb
+ 1231 001a 03       		.uleb128 0x3
+ 1232 001b 0E       		.uleb128 0xe
+ 1233 001c 00       		.byte	0
+ 1234 001d 00       		.byte	0
+ 1235 001e 03       		.uleb128 0x3
+ 1236 001f 16       		.uleb128 0x16
+ 1237 0020 00       		.byte	0
+ 1238 0021 03       		.uleb128 0x3
+ 1239 0022 0E       		.uleb128 0xe
+ 1240 0023 3A       		.uleb128 0x3a
+ 1241 0024 0B       		.uleb128 0xb
+ 1242 0025 3B       		.uleb128 0x3b
+ 1243 0026 0B       		.uleb128 0xb
+ 1244 0027 49       		.uleb128 0x49
+ 1245 0028 13       		.uleb128 0x13
+ 1246 0029 00       		.byte	0
+ 1247 002a 00       		.byte	0
+ 1248 002b 04       		.uleb128 0x4
+ 1249 002c 24       		.uleb128 0x24
+ 1250 002d 00       		.byte	0
+ 1251 002e 0B       		.uleb128 0xb
+ 1252 002f 0B       		.uleb128 0xb
+ 1253 0030 3E       		.uleb128 0x3e
+ 1254 0031 0B       		.uleb128 0xb
+ 1255 0032 03       		.uleb128 0x3
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 28
+
+
+ 1256 0033 08       		.uleb128 0x8
+ 1257 0034 00       		.byte	0
+ 1258 0035 00       		.byte	0
+ 1259 0036 05       		.uleb128 0x5
+ 1260 0037 04       		.uleb128 0x4
+ 1261 0038 01       		.byte	0x1
+ 1262 0039 0B       		.uleb128 0xb
+ 1263 003a 0B       		.uleb128 0xb
+ 1264 003b 49       		.uleb128 0x49
+ 1265 003c 13       		.uleb128 0x13
+ 1266 003d 3A       		.uleb128 0x3a
+ 1267 003e 0B       		.uleb128 0xb
+ 1268 003f 3B       		.uleb128 0x3b
+ 1269 0040 0B       		.uleb128 0xb
+ 1270 0041 01       		.uleb128 0x1
+ 1271 0042 13       		.uleb128 0x13
+ 1272 0043 00       		.byte	0
+ 1273 0044 00       		.byte	0
+ 1274 0045 06       		.uleb128 0x6
+ 1275 0046 28       		.uleb128 0x28
+ 1276 0047 00       		.byte	0
+ 1277 0048 03       		.uleb128 0x3
+ 1278 0049 0E       		.uleb128 0xe
+ 1279 004a 1C       		.uleb128 0x1c
+ 1280 004b 0B       		.uleb128 0xb
+ 1281 004c 00       		.byte	0
+ 1282 004d 00       		.byte	0
+ 1283 004e 07       		.uleb128 0x7
+ 1284 004f 2E       		.uleb128 0x2e
+ 1285 0050 01       		.byte	0x1
+ 1286 0051 3F       		.uleb128 0x3f
+ 1287 0052 19       		.uleb128 0x19
+ 1288 0053 03       		.uleb128 0x3
+ 1289 0054 0E       		.uleb128 0xe
+ 1290 0055 3A       		.uleb128 0x3a
+ 1291 0056 0B       		.uleb128 0xb
+ 1292 0057 3B       		.uleb128 0x3b
+ 1293 0058 0B       		.uleb128 0xb
+ 1294 0059 27       		.uleb128 0x27
+ 1295 005a 19       		.uleb128 0x19
+ 1296 005b 49       		.uleb128 0x49
+ 1297 005c 13       		.uleb128 0x13
+ 1298 005d 8701     		.uleb128 0x87
+ 1299 005f 19       		.uleb128 0x19
+ 1300 0060 11       		.uleb128 0x11
+ 1301 0061 01       		.uleb128 0x1
+ 1302 0062 12       		.uleb128 0x12
+ 1303 0063 06       		.uleb128 0x6
+ 1304 0064 40       		.uleb128 0x40
+ 1305 0065 18       		.uleb128 0x18
+ 1306 0066 9742     		.uleb128 0x2117
+ 1307 0068 19       		.uleb128 0x19
+ 1308 0069 01       		.uleb128 0x1
+ 1309 006a 13       		.uleb128 0x13
+ 1310 006b 00       		.byte	0
+ 1311 006c 00       		.byte	0
+ 1312 006d 08       		.uleb128 0x8
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 29
+
+
+ 1313 006e 34       		.uleb128 0x34
+ 1314 006f 00       		.byte	0
+ 1315 0070 03       		.uleb128 0x3
+ 1316 0071 0E       		.uleb128 0xe
+ 1317 0072 3A       		.uleb128 0x3a
+ 1318 0073 0B       		.uleb128 0xb
+ 1319 0074 3B       		.uleb128 0x3b
+ 1320 0075 0B       		.uleb128 0xb
+ 1321 0076 49       		.uleb128 0x49
+ 1322 0077 13       		.uleb128 0x13
+ 1323 0078 02       		.uleb128 0x2
+ 1324 0079 18       		.uleb128 0x18
+ 1325 007a 00       		.byte	0
+ 1326 007b 00       		.byte	0
+ 1327 007c 09       		.uleb128 0x9
+ 1328 007d 34       		.uleb128 0x34
+ 1329 007e 00       		.byte	0
+ 1330 007f 03       		.uleb128 0x3
+ 1331 0080 0E       		.uleb128 0xe
+ 1332 0081 3A       		.uleb128 0x3a
+ 1333 0082 0B       		.uleb128 0xb
+ 1334 0083 3B       		.uleb128 0x3b
+ 1335 0084 0B       		.uleb128 0xb
+ 1336 0085 49       		.uleb128 0x49
+ 1337 0086 13       		.uleb128 0x13
+ 1338 0087 02       		.uleb128 0x2
+ 1339 0088 17       		.uleb128 0x17
+ 1340 0089 00       		.byte	0
+ 1341 008a 00       		.byte	0
+ 1342 008b 0A       		.uleb128 0xa
+ 1343 008c 34       		.uleb128 0x34
+ 1344 008d 00       		.byte	0
+ 1345 008e 03       		.uleb128 0x3
+ 1346 008f 0E       		.uleb128 0xe
+ 1347 0090 3A       		.uleb128 0x3a
+ 1348 0091 0B       		.uleb128 0xb
+ 1349 0092 3B       		.uleb128 0x3b
+ 1350 0093 0B       		.uleb128 0xb
+ 1351 0094 49       		.uleb128 0x49
+ 1352 0095 13       		.uleb128 0x13
+ 1353 0096 00       		.byte	0
+ 1354 0097 00       		.byte	0
+ 1355 0098 0B       		.uleb128 0xb
+ 1356 0099 34       		.uleb128 0x34
+ 1357 009a 00       		.byte	0
+ 1358 009b 03       		.uleb128 0x3
+ 1359 009c 0E       		.uleb128 0xe
+ 1360 009d 3A       		.uleb128 0x3a
+ 1361 009e 0B       		.uleb128 0xb
+ 1362 009f 3B       		.uleb128 0x3b
+ 1363 00a0 0B       		.uleb128 0xb
+ 1364 00a1 49       		.uleb128 0x49
+ 1365 00a2 13       		.uleb128 0x13
+ 1366 00a3 1C       		.uleb128 0x1c
+ 1367 00a4 0B       		.uleb128 0xb
+ 1368 00a5 00       		.byte	0
+ 1369 00a6 00       		.byte	0
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 30
+
+
+ 1370 00a7 0C       		.uleb128 0xc
+ 1371 00a8 34       		.uleb128 0x34
+ 1372 00a9 00       		.byte	0
+ 1373 00aa 03       		.uleb128 0x3
+ 1374 00ab 08       		.uleb128 0x8
+ 1375 00ac 3A       		.uleb128 0x3a
+ 1376 00ad 0B       		.uleb128 0xb
+ 1377 00ae 3B       		.uleb128 0x3b
+ 1378 00af 0B       		.uleb128 0xb
+ 1379 00b0 49       		.uleb128 0x49
+ 1380 00b1 13       		.uleb128 0x13
+ 1381 00b2 00       		.byte	0
+ 1382 00b3 00       		.byte	0
+ 1383 00b4 0D       		.uleb128 0xd
+ 1384 00b5 34       		.uleb128 0x34
+ 1385 00b6 00       		.byte	0
+ 1386 00b7 03       		.uleb128 0x3
+ 1387 00b8 08       		.uleb128 0x8
+ 1388 00b9 3A       		.uleb128 0x3a
+ 1389 00ba 0B       		.uleb128 0xb
+ 1390 00bb 3B       		.uleb128 0x3b
+ 1391 00bc 0B       		.uleb128 0xb
+ 1392 00bd 49       		.uleb128 0x49
+ 1393 00be 13       		.uleb128 0x13
+ 1394 00bf 02       		.uleb128 0x2
+ 1395 00c0 17       		.uleb128 0x17
+ 1396 00c1 00       		.byte	0
+ 1397 00c2 00       		.byte	0
+ 1398 00c3 0E       		.uleb128 0xe
+ 1399 00c4 0B       		.uleb128 0xb
+ 1400 00c5 01       		.byte	0x1
+ 1401 00c6 11       		.uleb128 0x11
+ 1402 00c7 01       		.uleb128 0x1
+ 1403 00c8 12       		.uleb128 0x12
+ 1404 00c9 06       		.uleb128 0x6
+ 1405 00ca 01       		.uleb128 0x1
+ 1406 00cb 13       		.uleb128 0x13
+ 1407 00cc 00       		.byte	0
+ 1408 00cd 00       		.byte	0
+ 1409 00ce 0F       		.uleb128 0xf
+ 1410 00cf 898201   		.uleb128 0x4109
+ 1411 00d2 01       		.byte	0x1
+ 1412 00d3 11       		.uleb128 0x11
+ 1413 00d4 01       		.uleb128 0x1
+ 1414 00d5 31       		.uleb128 0x31
+ 1415 00d6 13       		.uleb128 0x13
+ 1416 00d7 01       		.uleb128 0x1
+ 1417 00d8 13       		.uleb128 0x13
+ 1418 00d9 00       		.byte	0
+ 1419 00da 00       		.byte	0
+ 1420 00db 10       		.uleb128 0x10
+ 1421 00dc 8A8201   		.uleb128 0x410a
+ 1422 00df 00       		.byte	0
+ 1423 00e0 02       		.uleb128 0x2
+ 1424 00e1 18       		.uleb128 0x18
+ 1425 00e2 9142     		.uleb128 0x2111
+ 1426 00e4 18       		.uleb128 0x18
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 31
+
+
+ 1427 00e5 00       		.byte	0
+ 1428 00e6 00       		.byte	0
+ 1429 00e7 11       		.uleb128 0x11
+ 1430 00e8 898201   		.uleb128 0x4109
+ 1431 00eb 01       		.byte	0x1
+ 1432 00ec 11       		.uleb128 0x11
+ 1433 00ed 01       		.uleb128 0x1
+ 1434 00ee 31       		.uleb128 0x31
+ 1435 00ef 13       		.uleb128 0x13
+ 1436 00f0 00       		.byte	0
+ 1437 00f1 00       		.byte	0
+ 1438 00f2 12       		.uleb128 0x12
+ 1439 00f3 898201   		.uleb128 0x4109
+ 1440 00f6 00       		.byte	0
+ 1441 00f7 11       		.uleb128 0x11
+ 1442 00f8 01       		.uleb128 0x1
+ 1443 00f9 31       		.uleb128 0x31
+ 1444 00fa 13       		.uleb128 0x13
+ 1445 00fb 00       		.byte	0
+ 1446 00fc 00       		.byte	0
+ 1447 00fd 13       		.uleb128 0x13
+ 1448 00fe 01       		.uleb128 0x1
+ 1449 00ff 01       		.byte	0x1
+ 1450 0100 49       		.uleb128 0x49
+ 1451 0101 13       		.uleb128 0x13
+ 1452 0102 01       		.uleb128 0x1
+ 1453 0103 13       		.uleb128 0x13
+ 1454 0104 00       		.byte	0
+ 1455 0105 00       		.byte	0
+ 1456 0106 14       		.uleb128 0x14
+ 1457 0107 21       		.uleb128 0x21
+ 1458 0108 00       		.byte	0
+ 1459 0109 49       		.uleb128 0x49
+ 1460 010a 13       		.uleb128 0x13
+ 1461 010b 2F       		.uleb128 0x2f
+ 1462 010c 0B       		.uleb128 0xb
+ 1463 010d 00       		.byte	0
+ 1464 010e 00       		.byte	0
+ 1465 010f 15       		.uleb128 0x15
+ 1466 0110 34       		.uleb128 0x34
+ 1467 0111 00       		.byte	0
+ 1468 0112 03       		.uleb128 0x3
+ 1469 0113 0E       		.uleb128 0xe
+ 1470 0114 3A       		.uleb128 0x3a
+ 1471 0115 0B       		.uleb128 0xb
+ 1472 0116 3B       		.uleb128 0x3b
+ 1473 0117 05       		.uleb128 0x5
+ 1474 0118 49       		.uleb128 0x49
+ 1475 0119 13       		.uleb128 0x13
+ 1476 011a 3F       		.uleb128 0x3f
+ 1477 011b 19       		.uleb128 0x19
+ 1478 011c 3C       		.uleb128 0x3c
+ 1479 011d 19       		.uleb128 0x19
+ 1480 011e 00       		.byte	0
+ 1481 011f 00       		.byte	0
+ 1482 0120 16       		.uleb128 0x16
+ 1483 0121 35       		.uleb128 0x35
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 32
+
+
+ 1484 0122 00       		.byte	0
+ 1485 0123 49       		.uleb128 0x49
+ 1486 0124 13       		.uleb128 0x13
+ 1487 0125 00       		.byte	0
+ 1488 0126 00       		.byte	0
+ 1489 0127 17       		.uleb128 0x17
+ 1490 0128 2E       		.uleb128 0x2e
+ 1491 0129 00       		.byte	0
+ 1492 012a 3F       		.uleb128 0x3f
+ 1493 012b 19       		.uleb128 0x19
+ 1494 012c 3C       		.uleb128 0x3c
+ 1495 012d 19       		.uleb128 0x19
+ 1496 012e 6E       		.uleb128 0x6e
+ 1497 012f 0E       		.uleb128 0xe
+ 1498 0130 03       		.uleb128 0x3
+ 1499 0131 0E       		.uleb128 0xe
+ 1500 0132 3A       		.uleb128 0x3a
+ 1501 0133 0B       		.uleb128 0xb
+ 1502 0134 3B       		.uleb128 0x3b
+ 1503 0135 0B       		.uleb128 0xb
+ 1504 0136 00       		.byte	0
+ 1505 0137 00       		.byte	0
+ 1506 0138 00       		.byte	0
+ 1507              		.section	.debug_loc,"",%progbits
+ 1508              	.Ldebug_loc0:
+ 1509              	.LLST0:
+ 1510 0000 14000000 		.4byte	.LVL2
+ 1511 0004 6E000000 		.4byte	.LVL16
+ 1512 0008 0300     		.2byte	0x3
+ 1513 000a 08       		.byte	0x8
+ 1514 000b 40       		.byte	0x40
+ 1515 000c 9F       		.byte	0x9f
+ 1516 000d 6E000000 		.4byte	.LVL16
+ 1517 0011 98000000 		.4byte	.LVL21
+ 1518 0015 0300     		.2byte	0x3
+ 1519 0017 08       		.byte	0x8
+ 1520 0018 27       		.byte	0x27
+ 1521 0019 9F       		.byte	0x9f
+ 1522 001a 98000000 		.4byte	.LVL21
+ 1523 001e B0000000 		.4byte	.LVL24
+ 1524 0022 0200     		.2byte	0x2
+ 1525 0024 30       		.byte	0x30
+ 1526 0025 9F       		.byte	0x9f
+ 1527 0026 32010000 		.4byte	.LVL36
+ 1528 002a 3C010000 		.4byte	.LVL37
+ 1529 002e 0200     		.2byte	0x2
+ 1530 0030 30       		.byte	0x30
+ 1531 0031 9F       		.byte	0x9f
+ 1532 0032 3C010000 		.4byte	.LVL37
+ 1533 0036 C4010000 		.4byte	.LFE64
+ 1534 003a 0300     		.2byte	0x3
+ 1535 003c 08       		.byte	0x8
+ 1536 003d 40       		.byte	0x40
+ 1537 003e 9F       		.byte	0x9f
+ 1538 003f 00000000 		.4byte	0
+ 1539 0043 00000000 		.4byte	0
+ 1540              	.LLST1:
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 33
+
+
+ 1541 0047 28000000 		.4byte	.LVL4
+ 1542 004b 30000000 		.4byte	.LVL5
+ 1543 004f 0100     		.2byte	0x1
+ 1544 0051 50       		.byte	0x50
+ 1545 0052 3E000000 		.4byte	.LVL7
+ 1546 0056 40000000 		.4byte	.LVL8
+ 1547 005a 0100     		.2byte	0x1
+ 1548 005c 50       		.byte	0x50
+ 1549 005d 50000000 		.4byte	.LVL10
+ 1550 0061 5C000000 		.4byte	.LVL11
+ 1551 0065 0100     		.2byte	0x1
+ 1552 0067 50       		.byte	0x50
+ 1553 0068 68000000 		.4byte	.LVL14
+ 1554 006c 6A000000 		.4byte	.LVL15
+ 1555 0070 0100     		.2byte	0x1
+ 1556 0072 50       		.byte	0x50
+ 1557 0073 84000000 		.4byte	.LVL18
+ 1558 0077 8E000000 		.4byte	.LVL19
+ 1559 007b 0100     		.2byte	0x1
+ 1560 007d 50       		.byte	0x50
+ 1561 007e FC000000 		.4byte	.LVL29
+ 1562 0082 0E010000 		.4byte	.LVL30
+ 1563 0086 0100     		.2byte	0x1
+ 1564 0088 50       		.byte	0x50
+ 1565 0089 00000000 		.4byte	0
+ 1566 008d 00000000 		.4byte	0
+ 1567              	.LLST2:
+ 1568 0091 B0000000 		.4byte	.LVL24
+ 1569 0095 1A010000 		.4byte	.LVL33
+ 1570 0099 0100     		.2byte	0x1
+ 1571 009b 55       		.byte	0x55
+ 1572 009c 1C010000 		.4byte	.LVL34
+ 1573 00a0 C4010000 		.4byte	.LFE64
+ 1574 00a4 0100     		.2byte	0x1
+ 1575 00a6 55       		.byte	0x55
+ 1576 00a7 00000000 		.4byte	0
+ 1577 00ab 00000000 		.4byte	0
+ 1578              	.LLST3:
+ 1579 00af 5C010000 		.4byte	.LVL39
+ 1580 00b3 60010000 		.4byte	.LVL40
+ 1581 00b7 0200     		.2byte	0x2
+ 1582 00b9 30       		.byte	0x30
+ 1583 00ba 9F       		.byte	0x9f
+ 1584 00bb 60010000 		.4byte	.LVL40
+ 1585 00bf 74010000 		.4byte	.LVL41
+ 1586 00c3 0100     		.2byte	0x1
+ 1587 00c5 51       		.byte	0x51
+ 1588 00c6 74010000 		.4byte	.LVL41
+ 1589 00ca 78010000 		.4byte	.LVL42
+ 1590 00ce 0300     		.2byte	0x3
+ 1591 00d0 71       		.byte	0x71
+ 1592 00d1 7E       		.sleb128 -2
+ 1593 00d2 9F       		.byte	0x9f
+ 1594 00d3 78010000 		.4byte	.LVL42
+ 1595 00d7 92010000 		.4byte	.LVL45
+ 1596 00db 0300     		.2byte	0x3
+ 1597 00dd 74       		.byte	0x74
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 34
+
+
+ 1598 00de 7F       		.sleb128 -1
+ 1599 00df 9F       		.byte	0x9f
+ 1600 00e0 92010000 		.4byte	.LVL45
+ 1601 00e4 94010000 		.4byte	.LVL46
+ 1602 00e8 0100     		.2byte	0x1
+ 1603 00ea 54       		.byte	0x54
+ 1604 00eb 94010000 		.4byte	.LVL46
+ 1605 00ef 9D010000 		.4byte	.LVL47-1
+ 1606 00f3 0100     		.2byte	0x1
+ 1607 00f5 51       		.byte	0x51
+ 1608 00f6 00000000 		.4byte	0
+ 1609 00fa 00000000 		.4byte	0
+ 1610              		.section	.debug_aranges,"",%progbits
+ 1611 0000 1C000000 		.4byte	0x1c
+ 1612 0004 0200     		.2byte	0x2
+ 1613 0006 00000000 		.4byte	.Ldebug_info0
+ 1614 000a 04       		.byte	0x4
+ 1615 000b 00       		.byte	0
+ 1616 000c 0000     		.2byte	0
+ 1617 000e 0000     		.2byte	0
+ 1618 0010 00000000 		.4byte	.LFB64
+ 1619 0014 C4010000 		.4byte	.LFE64-.LFB64
+ 1620 0018 00000000 		.4byte	0
+ 1621 001c 00000000 		.4byte	0
+ 1622              		.section	.debug_ranges,"",%progbits
+ 1623              	.Ldebug_ranges0:
+ 1624 0000 00000000 		.4byte	.LFB64
+ 1625 0004 C4010000 		.4byte	.LFE64
+ 1626 0008 00000000 		.4byte	0
+ 1627 000c 00000000 		.4byte	0
+ 1628              		.section	.debug_line,"",%progbits
+ 1629              	.Ldebug_line0:
+ 1630 0000 76020000 		.section	.debug_str,"MS",%progbits,1
+ 1630      0200FA01 
+ 1630      00000201 
+ 1630      FB0E0D00 
+ 1630      01010101 
+ 1631              	.LASF21:
+ 1632 0000 6D657373 		.ascii	"message\000"
+ 1632      61676500 
+ 1633              	.LASF41:
+ 1634 0008 666C6167 		.ascii	"flag_dati\000"
+ 1634      5F646174 
+ 1634      6900
+ 1635              	.LASF46:
+ 1636 0012 55415254 		.ascii	"UART_1_Start\000"
+ 1636      5F315F53 
+ 1636      74617274 
+ 1636      00
+ 1637              	.LASF4:
+ 1638 001f 5F5F7569 		.ascii	"__uint8_t\000"
+ 1638      6E74385F 
+ 1638      7400
+ 1639              	.LASF27:
+ 1640 0029 6F75745F 		.ascii	"out_x\000"
+ 1640      7800
+ 1641              	.LASF30:
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 35
+
+
+ 1642 002f 6F75745F 		.ascii	"out_y\000"
+ 1642      7900
+ 1643              	.LASF33:
+ 1644 0035 6F75745F 		.ascii	"out_z\000"
+ 1644      7A00
+ 1645              	.LASF5:
+ 1646 003b 5F5F696E 		.ascii	"__int32_t\000"
+ 1646      7433325F 
+ 1646      7400
+ 1647              	.LASF6:
+ 1648 0045 6C6F6E67 		.ascii	"long int\000"
+ 1648      20696E74 
+ 1648      00
+ 1649              	.LASF37:
+ 1650 004e 6F766572 		.ascii	"overrun\000"
+ 1650      72756E00 
+ 1651              	.LASF20:
+ 1652 0056 4572726F 		.ascii	"ErrorCode\000"
+ 1652      72436F64 
+ 1652      6500
+ 1653              	.LASF24:
+ 1654 0060 63686563 		.ascii	"check\000"
+ 1654      6B00
+ 1655              	.LASF16:
+ 1656 0066 666C6F61 		.ascii	"float\000"
+ 1656      7400
+ 1657              	.LASF25:
+ 1658 006c 72656731 		.ascii	"reg1\000"
+ 1658      00
+ 1659              	.LASF1:
+ 1660 0071 756E7369 		.ascii	"unsigned char\000"
+ 1660      676E6564 
+ 1660      20636861 
+ 1660      7200
+ 1661              	.LASF49:
+ 1662 007f 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1662      43313120 
+ 1662      352E342E 
+ 1662      31203230 
+ 1662      31363036 
+ 1663 00b2 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 1663      20726576 
+ 1663      6973696F 
+ 1663      6E203233 
+ 1663      37373135 
+ 1664 00e5 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1664      66756E63 
+ 1664      74696F6E 
+ 1664      2D736563 
+ 1664      74696F6E 
+ 1665              	.LASF29:
+ 1666 010d 795F6461 		.ascii	"y_data\000"
+ 1666      746100
+ 1667              	.LASF7:
+ 1668 0114 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1668      20756E73 
+ 1668      69676E65 
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 36
+
+
+ 1668      6420696E 
+ 1668      7400
+ 1669              	.LASF3:
+ 1670 0126 73686F72 		.ascii	"short unsigned int\000"
+ 1670      7420756E 
+ 1670      7369676E 
+ 1670      65642069 
+ 1670      6E7400
+ 1671              	.LASF47:
+ 1672 0139 4932435F 		.ascii	"I2C_Peripheral_WriteRegister\000"
+ 1672      50657269 
+ 1672      70686572 
+ 1672      616C5F57 
+ 1672      72697465 
+ 1673              	.LASF53:
+ 1674 0156 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1674      52784275 
+ 1674      66666572 
+ 1674      00
+ 1675              	.LASF51:
+ 1676 0163 433A5C55 		.ascii	"C:\\Users\\Martina\\Documents\\Ing.Biomedica Magist"
+ 1676      73657273 
+ 1676      5C4D6172 
+ 1676      74696E61 
+ 1676      5C446F63 
+ 1677 0192 72616C65 		.ascii	"rale\\2 ANNO\\Lab biosensori\\PROGETTO\\Repository_"
+ 1677      5C322041 
+ 1677      4E4E4F5C 
+ 1677      4C616220 
+ 1677      62696F73 
+ 1678 01c1 70726F67 		.ascii	"progetto\\LTEBS-PROJECT-RR\\RR\\ACC_FIFO_while_empt"
+ 1678      6574746F 
+ 1678      5C4C5445 
+ 1678      42532D50 
+ 1678      524F4A45 
+ 1679 01f1 792E6379 		.ascii	"y.cydsn\000"
+ 1679      64736E00 
+ 1680              	.LASF17:
+ 1681 01f9 646F7562 		.ascii	"double\000"
+ 1681      6C6500
+ 1682              	.LASF26:
+ 1683 0200 785F6461 		.ascii	"x_data\000"
+ 1683      746100
+ 1684              	.LASF22:
+ 1685 0207 636F6E74 		.ascii	"control_reg\000"
+ 1685      726F6C5F 
+ 1685      72656700 
+ 1686              	.LASF38:
+ 1687 0213 61636365 		.ascii	"accelerazioni\000"
+ 1687      6C657261 
+ 1687      7A696F6E 
+ 1687      6900
+ 1688              	.LASF52:
+ 1689 0221 6D61696E 		.ascii	"main\000"
+ 1689      00
+ 1690              	.LASF10:
+ 1691 0226 756E7369 		.ascii	"unsigned int\000"
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 37
+
+
+ 1691      676E6564 
+ 1691      20696E74 
+ 1691      00
+ 1692              	.LASF35:
+ 1693 0233 61646472 		.ascii	"address\000"
+ 1693      65737300 
+ 1694              	.LASF9:
+ 1695 023b 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1695      206C6F6E 
+ 1695      6720756E 
+ 1695      7369676E 
+ 1695      65642069 
+ 1696              	.LASF14:
+ 1697 0252 75696E74 		.ascii	"uint8_t\000"
+ 1697      385F7400 
+ 1698              	.LASF39:
+ 1699 025a 72656D61 		.ascii	"remain\000"
+ 1699      696E00
+ 1700              	.LASF40:
+ 1701 0261 656D7074 		.ascii	"empty\000"
+ 1701      7900
+ 1702              	.LASF15:
+ 1703 0267 696E7433 		.ascii	"int32_t\000"
+ 1703      325F7400 
+ 1704              	.LASF32:
+ 1705 026f 7A5F6461 		.ascii	"z_data\000"
+ 1705      746100
+ 1706              	.LASF36:
+ 1707 0276 6C69735F 		.ascii	"lis_data\000"
+ 1707      64617461 
+ 1707      00
+ 1708              	.LASF23:
+ 1709 027f 6572726F 		.ascii	"error\000"
+ 1709      7200
+ 1710              	.LASF8:
+ 1711 0285 6C6F6E67 		.ascii	"long long int\000"
+ 1711      206C6F6E 
+ 1711      6720696E 
+ 1711      7400
+ 1712              	.LASF12:
+ 1713 0293 73697A65 		.ascii	"sizetype\000"
+ 1713      74797065 
+ 1713      00
+ 1714              	.LASF50:
+ 1715 029c 6D61696E 		.ascii	"main.c\000"
+ 1715      2E6300
+ 1716              	.LASF13:
+ 1717 02a3 63686172 		.ascii	"char\000"
+ 1717      00
+ 1718              	.LASF48:
+ 1719 02a8 4932435F 		.ascii	"I2C_Peripheral_ReadRegister\000"
+ 1719      50657269 
+ 1719      70686572 
+ 1719      616C5F52 
+ 1719      65616452 
+ 1720              	.LASF28:
+ 1721 02c4 64617461 		.ascii	"data_x\000"
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\ccJc4yJc.s 			page 38
+
+
+ 1721      5F7800
+ 1722              	.LASF31:
+ 1723 02cb 64617461 		.ascii	"data_y\000"
+ 1723      5F7900
+ 1724              	.LASF34:
+ 1725 02d2 64617461 		.ascii	"data_z\000"
+ 1725      5F7A00
+ 1726              	.LASF2:
+ 1727 02d9 73686F72 		.ascii	"short int\000"
+ 1727      7420696E 
+ 1727      7400
+ 1728              	.LASF18:
+ 1729 02e3 4E4F5F45 		.ascii	"NO_ERROR\000"
+ 1729      52524F52 
+ 1729      00
+ 1730              	.LASF19:
+ 1731 02ec 4552524F 		.ascii	"ERROR\000"
+ 1731      5200
+ 1732              	.LASF11:
+ 1733 02f2 6C6F6E67 		.ascii	"long double\000"
+ 1733      20646F75 
+ 1733      626C6500 
+ 1734              	.LASF0:
+ 1735 02fe 7369676E 		.ascii	"signed char\000"
+ 1735      65642063 
+ 1735      68617200 
+ 1736              	.LASF43:
+ 1737 030a 55415254 		.ascii	"UART_1_PutString\000"
+ 1737      5F315F50 
+ 1737      75745374 
+ 1737      72696E67 
+ 1737      00
+ 1738              	.LASF42:
+ 1739 031b 73707269 		.ascii	"sprintf\000"
+ 1739      6E746600 
+ 1740              	.LASF44:
+ 1741 0323 43794465 		.ascii	"CyDelay\000"
+ 1741      6C617900 
+ 1742              	.LASF45:
+ 1743 032b 4932435F 		.ascii	"I2C_Peripheral_Start\000"
+ 1743      50657269 
+ 1743      70686572 
+ 1743      616C5F53 
+ 1743      74617274 
+ 1744              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

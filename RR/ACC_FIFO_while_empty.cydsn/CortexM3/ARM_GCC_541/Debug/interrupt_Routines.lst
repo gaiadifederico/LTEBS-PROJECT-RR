@@ -1,0 +1,69 @@
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\cc3lGc2E.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"interrupt_Routines.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              	.Letext0:
+  20              		.section	.debug_line,"",%progbits
+  21              	.Ldebug_line0:
+  22              		.section	.debug_str,"MS",%progbits,1
+  23              	.LASF0:
+  24 0000 433A5C55 		.ascii	"C:\\Users\\Martina\\Documents\\Ing.Biomedica Magist"
+  24      73657273 
+  24      5C4D6172 
+  24      74696E61 
+  24      5C446F63 
+  25 002f 72616C65 		.ascii	"rale\\2 ANNO\\Lab biosensori\\PROGETTO\\Repository_"
+  25      5C322041 
+  25      4E4E4F5C 
+  25      4C616220 
+  25      62696F73 
+  26 005e 70726F67 		.ascii	"progetto\\LTEBS-PROJECT-RR\\RR\\ACC_FIFO_while_empt"
+  26      6574746F 
+  26      5C4C5445 
+  26      42532D50 
+  26      524F4A45 
+  27 008e 792E6379 		.ascii	"y.cydsn\000"
+  27      64736E00 
+  28              	.LASF1:
+  29 0096 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+  29      43313120 
+  29      352E342E 
+  29      31203230 
+  29      31363036 
+  30 00c9 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+  30      20726576 
+  30      6973696F 
+  30      6E203233 
+  30      37373135 
+  31 00fc 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+  31      66756E63 
+  31      74696F6E 
+  31      2D736563 
+  31      74696F6E 
+  32              	.LASF2:
+ARM GAS  C:\Users\Martina\AppData\Local\Temp\cc3lGc2E.s 			page 2
+
+
+  33 0124 696E7465 		.ascii	"interrupt_Routines.c\000"
+  33      72727570 
+  33      745F526F 
+  33      7574696E 
+  33      65732E63 
+  34              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
